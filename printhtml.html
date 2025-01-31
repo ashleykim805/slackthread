@@ -76,7 +76,8 @@
     </div>
     <div class="output-section">
         <h2>Formatted Output</h2>
-        <div id="output" class="output">
+        <pre id="output" style="border: 1px solid black; padding: 10px; margin-top: 10px; white-space: pre-wrap;"></pre>
+<!--        <div id="output" class="output">-->
         </div>
     </div>
 </div>
@@ -140,13 +141,29 @@
         tempDiv.innerHTML = editor.innerHTML.trim(); // Trim to remove extra spaces
 
         // Pretty print using indentation
-        output.textContent = formatHTML(tempDiv.innerHTML);
+        output.innerText = formatHTML(tempDiv.innerHTML);
     }
 
-    // Function to format HTML with indentation
+    // // Function to format HTML with indentation
+    // function formatHTML(html) {
+    //     const formatted = html.replace(/></g, ">\n<"); // Add line breaks
+    //     return formatted;
+    // }
+
     function formatHTML(html) {
-        const formatted = html.replace(/></g, ">\n<"); // Add line breaks
-        return formatted;
+        const tabSize = 4;
+        let formatted = '', indent = 0;
+
+        // Add line breaks and indentation
+        html.split(/>\s*</).forEach((element) => {
+            if (element.match(/^\/\w/)) indent -= 1; // Closing tag → decrease indent
+
+            formatted += ' '.repeat(indent * tabSize) + '<' + element.trim() + '>\n';
+
+            if (element.match(/^<?\w[^>]*[^\/]$/) && !element.startsWith("!")) indent += 1; // Opening tag → increase indent
+        });
+
+        return formatted.trim();
     }
 
     // Clear the editor when it's clicked again

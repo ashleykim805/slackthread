@@ -200,7 +200,7 @@
 
             // processChildren(child)
             // output.innerText += child + "\n"
-            console.dir(child)
+            // console.dir(child)
             blankDiv.append(...processChildren(child));
         });
         tempDiv.appendChild(blankDiv)
@@ -210,7 +210,7 @@
     }
 
     function processChildren(element) {
-        console.log("processing: " + element.className)
+        // console.log("processing: " + element.className)
         let transformedNode = null;
         if (element.getAttribute("id") == "tempDiv") {
             transformedNode = document.createElement('div');
@@ -222,13 +222,16 @@
         }
         if (element.className == "c-link--button c-message__sender_button") {
             transformedNode = document.createElement("b");
-            transformedNode.innerHTML = element.innerHTML;
+            transformedNode.innerHTML = null;
+            transformedNode.innerText = element.innerText;
+            console.dir([transformedNode]);
+            return [ transformedNode ];
         }
         if (element.className == "c-timestamp__label") {
             transformedNode = document.createElement("span");
             // transformedNode.innerHTML += " ";
-            transformedNode.innerHTML = " " + element.innerHTML;
-            transformedNode.innerHTML += ": ";
+            transformedNode.innerText = " " + element.innerText;
+            transformedNode.innerText += ": ";
         }
         if (element.className == "p-rich_text_section") {
             // printToOutput(element.innerText);
@@ -260,8 +263,8 @@
         }
         if (transformedNode != null) {
             if (transformedNode.tagName == "LI") {
-                console.log("this is a li:")
-                console.dir(element)
+                // console.log("this is a li:")
+                // console.dir(element)
                 // }
                 // Array.from(element.children).forEach(child =>
                 //     // const transformedChild = processChildren(child);
