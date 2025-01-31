@@ -116,48 +116,51 @@ alt=":np-4583:" data-stringify-type="emoji" data-stringify-emoji=":np-4583:"
     <div class="output-section">
         <h2>Formatted Output</h2>
         <div id="output" class="output">
-<!--            <ul>-->
-<!--                <li><b>Juntoku Shimizu</b> [11:03AM]: Hm ok so if the pre migration account status is still MIGRATING_PAYMENTS that means we just need to dequeue?</li>-->
-<!--                <li><b>Ashley Kim</b> [11:06AM]:  sometimes that can mean that the PMs have been uploaded to Stripe and we just haven’t received the response yet <img className="inline-emoji"-->
-<!--                        src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f914@2x.png"-->
-<!--                        aria-label="thinking face emoji" alt=":thinking_face:" data-stringify-type="emoji"-->
-<!--                        data-stringify-emoji=":thinking_face:">-->
-<!--                    <br/>-->
-<!--                    <t/>-->
-<!--                    if that’s the case, then it will probs cause some issues in the migration pubsub if we rollback before that-->
-<!--                    <br/>-->
-<!--                    <t/>-->
-<!--                    the file usually uploads on thursday, so maybe we can wait till EOD to see which action to take?</li>-->
-<!--                <li><b>Juntoku Shimizu</b> [11:10AM]: <img className="inline-emoji"-->
-<!--                        src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f44d@2x.png"-->
-<!--                        aria-label="+1 emoji" alt=":+1:" data-stringify-type="emoji" data-stringify-emoji=":+1:"></li>-->
-<!--            </ul>-->
-<!--            <ul>-->
-<!--                <li><b>Ashley Kim</b> [12:53PM]: yeah that sounds good!</li>-->
-<!--                <li><b>Ashley Kim</b> [12:53PM]: yeah that sounds good!-->
-<!--                    <img src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f642@2x.png"-->
-<!--                         aria-label="slightly smiling face emoji" alt=":slightly_smiling_face:"-->
-<!--                         data-stringify-type="emoji" data-stringify-emoji=":slightly_smiling_face:"-->
-<!--                    >-->
-<!--                </li>-->
-<!--                <li><b>Ashley Kim</b> [12:53PM]: Thanks Sinead. <a href="google.com">@askim</a> are we blocked for the-->
-<!--                    time being? or can we still complete the SEPA updates while we wait for clarification on the data-->
-<!--                    retention?-->
-<!--                    <br/>-->
-<!--                    <t/>-->
-<!--                    Hey are we still on?-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--            <div>bold italic strikethrough link</div>-->
-<!--            <div>ordered list&nbsp;</div>-->
-<!--            <div>number two</div>-->
-<!--            <div>unorderlist</div>-->
-<!--            <div>number 2</div>-->
-<!--            <div><br></div>-->
-<!--            <div>block quote</div>-->
-<!--            <div>code</div>-->
-<!--            <div>code block.&nbsp;</div>-->
-<!--            <div>:np-4583:@clee&nbsp;<br><br><br></div>-->
+            <ul>
+                <li><b>Juntoku Shimizu</b> [11:03AM]: Hm ok so if the pre migration account status is still MIGRATING_PAYMENTS that means we just need to dequeue?</li>
+                <li><b>Ashley Kim</b> [11:06AM]:
+                    <br/>
+                    <t/>
+                    sometimes that can mean that the PMs have been uploaded to Stripe and we just haven’t received the response yet <img className="inline-emoji"
+                                                                                                                                         src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f914@2x.png"
+                                                                                                                                         aria-label="thinking face emoji" alt=":thinking_face:" data-stringify-type="emoji"
+                                                                                                                                         data-stringify-emoji=":thinking_face:">
+                    <br/>
+                    <t/>
+                    if that’s the case, then it will probs cause some issues in the migration pubsub if we rollback before that
+                    <br/>
+                    <t/>
+                    the file usually uploads on thursday, so maybe we can wait till EOD to see which action to take?</li>
+                <li><b>Juntoku Shimizu</b> [11:10AM]: <img className="inline-emoji"
+                                                           src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f44d@2x.png"
+                                                           aria-label="+1 emoji" alt=":+1:" data-stringify-type="emoji" data-stringify-emoji=":+1:"></li>
+            </ul>
+            <!--            <ul>-->
+            <!--                <li><b>Ashley Kim</b> [12:53PM]: yeah that sounds good!</li>-->
+            <!--                <li><b>Ashley Kim</b> [12:53PM]: yeah that sounds good!-->
+            <!--                    <img src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f642@2x.png"-->
+            <!--                         aria-label="slightly smiling face emoji" alt=":slightly_smiling_face:"-->
+            <!--                         data-stringify-type="emoji" data-stringify-emoji=":slightly_smiling_face:"-->
+            <!--                    >-->
+            <!--                </li>-->
+            <!--                <li><b>Ashley Kim</b> [12:53PM]: Thanks Sinead. <a href="google.com">@askim</a> are we blocked for the-->
+            <!--                    time being? or can we still complete the SEPA updates while we wait for clarification on the data-->
+            <!--                    retention?-->
+            <!--                    <br/>-->
+            <!--                    <t/>-->
+            <!--                    Hey are we still on?-->
+            <!--                </li>-->
+            <!--            </ul>-->
+            <!--            <div>bold italic strikethrough link</div>-->
+            <!--            <div>ordered list&nbsp;</div>-->
+            <!--            <div>number two</div>-->
+            <!--            <div>unorderlist</div>-->
+            <!--            <div>number 2</div>-->
+            <!--            <div><br></div>-->
+            <!--            <div>block quote</div>-->
+            <!--            <div>code</div>-->
+            <!--            <div>code block.&nbsp;</div>-->
+            <!--            <div>:np-4583:@clee&nbsp;<br><br><br></div>-->
         </div>
     </div>
 </div>
@@ -173,17 +176,17 @@ alt=":np-4583:" data-stringify-type="emoji" data-stringify-emoji=":np-4583:"
 
     // Format on input
     // editor.addEventListener('input', () => {
-        // formatInput2();
+    // formatInput2();
 
-        // Update output to reflect innerHTML
-        // const formattedContent = editor.innerHTML;
-        // output.innerHTML = formattedContent;
-        // const elems =  editor.innerHTML.querySelectorAll('*');
-        // elems.forEach(e => {
-        //     e.appendChild(document.createElement('br'));
-        // });
-        // output.textContent = editor.innerHTML;
-        // output.innerHTML = editor.innerHTML;
+    // Update output to reflect innerHTML
+    // const formattedContent = editor.innerHTML;
+    // output.innerHTML = formattedContent;
+    // const elems =  editor.innerHTML.querySelectorAll('*');
+    // elems.forEach(e => {
+    //     e.appendChild(document.createElement('br'));
+    // });
+    // output.textContent = editor.innerHTML;
+    // output.innerHTML = editor.innerHTML;
     // });
 
     // testingOutFormatForMe();
@@ -217,6 +220,7 @@ alt=":np-4583:" data-stringify-type="emoji" data-stringify-emoji=":np-4583:"
         document.querySelectorAll('.c-message__actions').forEach(element => {
             element.remove(); // Removes the element from the DOM
         });
+
         // Iterate through elements that weren't removed
         elements.forEach(element => {
             if (element.role == "listitem") {
@@ -273,42 +277,42 @@ alt=":np-4583:" data-stringify-type="emoji" data-stringify-emoji=":np-4583:"
     }
 
     //// CHATGPT's SOLUTION
-   // editor.addEventListener('input', function() {
-   //      let editorContent = document.getElementById('editor').innerHTML;
-   //      // let viewOption = document.querySelector('input[name="view"]:checked');
-   //      // let showReactions = document.getElementById('show-reactions').checked;
-   //
-   //      // if (viewOption) {
-   //      //     if (viewOption.value === 'bullet') {
-   //              editorContent = convertToBulletView(editorContent);
-   //          // } else if (viewOption.value === 'table') {
-   //          //     editorContent = convertToTableView(editorContent);
-   //          // }
-   //      // }
-   //
-   //      // if (showReactions) {
-   //      //     editorContent = addReactions(editorContent);
-   //      // }
-   //
-   //      output.innerHTML = editorContent;
-   //  });
-   //
+    // editor.addEventListener('input', function() {
+    //      let editorContent = document.getElementById('editor').innerHTML;
+    //      // let viewOption = document.querySelector('input[name="view"]:checked');
+    //      // let showReactions = document.getElementById('show-reactions').checked;
+    //
+    //      // if (viewOption) {
+    //      //     if (viewOption.value === 'bullet') {
+    //              editorContent = convertToBulletView(editorContent);
+    //          // } else if (viewOption.value === 'table') {
+    //          //     editorContent = convertToTableView(editorContent);
+    //          // }
+    //      // }
+    //
+    //      // if (showReactions) {
+    //      //     editorContent = addReactions(editorContent);
+    //      // }
+    //
+    //      output.innerHTML = editorContent;
+    //  });
+    //
     function convertToBulletView(content) {
         return content.replace(/<div class="c-message_kit__blocks c-message_kit__blocks--rich_text.*?>(.*?)<\/div>/g, '<ul><li>$1</li></ul>');
     }
-   //
-   //  function convertToTableView(content) {
-   //      return content.replace(/<div class="c-message_kit__blocks c-message_kit__blocks--rich_text.*?>(.*?)<\/div>/g, '<table><tr><td>$1</td></tr></table>');
-   //  }
-   //
-   //  function addReactions(content) {
-   //      const reactions = ['+1', 'ty', 'pin']; // You can expand this based on your emoji options
-   //      reactions.forEach(emoji => {
-   //          const emojiImg = `<img src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-small/${emoji}@2x.png" alt="${emoji}" />`;
-   //          content = content.replace(new RegExp(`<button.*?data-stringify-emoji="${emoji}".*?>.*?</button>`, 'g'), emojiImg);
-   //      });
-   //      return content;
-   //  }
+    //
+    //  function convertToTableView(content) {
+    //      return content.replace(/<div class="c-message_kit__blocks c-message_kit__blocks--rich_text.*?>(.*?)<\/div>/g, '<table><tr><td>$1</td></tr></table>');
+    //  }
+    //
+    //  function addReactions(content) {
+    //      const reactions = ['+1', 'ty', 'pin']; // You can expand this based on your emoji options
+    //      reactions.forEach(emoji => {
+    //          const emojiImg = `<img src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-small/${emoji}@2x.png" alt="${emoji}" />`;
+    //          content = content.replace(new RegExp(`<button.*?data-stringify-emoji="${emoji}".*?>.*?</button>`, 'g'), emojiImg);
+    //      });
+    //      return content;
+    //  }
 
     editor.addEventListener('input', function() {
 
@@ -322,7 +326,7 @@ alt=":np-4583:" data-stringify-type="emoji" data-stringify-emoji=":np-4583:"
     });
 
 
-    </script>
+</script>
 </body>
 
 </html>

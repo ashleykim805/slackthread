@@ -68,96 +68,86 @@
         }
     </style>
 </head>
-
-<!--
-my notes:
-bold is in b duh
-<b data-stringify-type="bold" style="box-sizing: inherit;">
-
-italic is in i
-<i data-stringify-type="italic" style="box-sizing: inherit;">italic</i>
-
-strikethrough <s data-stringify-type="strike" style="box-sizing: inherit;">strikethrough</s>
-
-ordered list
- <ol data-stringify-type="ordered-list" data-list-tree="true"
-        class="p-rich_text_list p-rich_text_list__ordered p-rich_text_list--nested" data-indent="0" data-border="0"
-        style="box-sizing: inherit; margin: 0px; padding: 0px;">
-
-
-blockquote
-<blockquote type="cite" class="c-mrkdwn__quote" data-stringify-type="quote"
-                style="box-sizing: inherit; margin: 4px 0px; padding: 0px 0px 0px 16px; position: relative;">block quote
-    </blockquote>
-
-code
-<code data-stringify-type="code" class="c-mrkdwn__code"
-
-code block
-<div class="p-rich_text_block--no-overflow"
-
-tagging others
-<a
-            target="_blank" class="c-link c-member_slug c-member_slug--light c-member_slug--link"
-            data-member-id="U019C91MZ0Q" data-member-label="@clee" data-stringify-type="mention"
-            data-stringify-id="U019C91MZ0Q" data-stringify-label="@clee" tabindex="0" aria-hidden="false"
-            href="https://squarespace.slack.com/team/U019C91MZ0Q" rel="noopener noreferrer"
-
-
-<img src="https://emoji.slack-edge.com/T01Q44F43U7/np-4583/b2afb033ddbecddc.png" aria-label="np 4583 emoji"
-alt=":np-4583:" data-stringify-type="emoji" data-stringify-emoji=":np-4583:"
--->
 <body>
 <div class="container">
     <div class="input-section">
         <h2>Rich Text Editor</h2>
-        <div id="editor" class="editor" contenteditable="true" placeholder="Type something..."></div>
+        <div id="editor" class="editor" contenteditable="true" placeholder="Type something...">
+            <div class="c-virtual_list__item">
+                <div class="c-message_kit__background p-message_pane_message__message c-message_kit__message">
+                    <div class="c-message_kit__hover">
+                        <div class="c-message_kit__actions c-message_kit__actions--default">
+                            <div class="c-message_kit__gutter">
+                                <div class="c-message_kit__gutter__left"><span class="p-member_profile_hover_card"> <button
+                                        class="c-button-unstyled c-message_kit__avatar c-avatar c-avatar--interactive"> <span
+                                        class="c-base_icon__width_only_container"> <img
+                                        src="https://ca.slack-edge.com/E01Q44F43U7-UKB1DLGBY-e53c18ba0452-48"
+                                        class="c-base_icon c-base_icon--image"> </span> </button> </span></div>
+                                <div class="c-message_kit__gutter__right"><span
+                                        class="c-message__sender c-message_kit__sender"> <span class="p-member_profile_hover_card"> <button
+                                        class="c-link--button c-message__sender_button">Ashley Kim</button> </span> <span
+                                        class="offscreen">Ashley Kim</span> </span>&nbsp;&nbsp;<a class="c-link c-timestamp"
+                                                                                                  href="https://squarespace.slack.com/archives/C078WKY7VUZ/p1738253162713079">
+                                    <span class="c-timestamp__label">11:06 AM</span> </a> <br>
+                                    <div class="c-message_kit__blocks c-message_kit__blocks--rich_text">
+                                        <div class="c-message__message_blocks c-message__message_blocks--rich_text">
+                                            <div class="p-block_kit_renderer">
+                                                <div class="p-block_kit_renderer__block_wrapper p-block_kit_renderer__block_wrapper--first">
+                                                    <div class="p-rich_text_block">
+                                                        <div class="p-rich_text_section">sometimes that can mean that the PMs have
+                                                            been uploaded to Stripe and we just&nbsp;haven’t&nbsp;received the
+                                                            response yet&nbsp;<span class="c-emoji c-emoji__medium c-emoji--inline"> <img
+                                                                    src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f914@2x.png"> </span>
+                                                            <br>if&nbsp;that’s&nbsp;the case, then it will probs cause some issues
+                                                            in the migration pubsub if we rollback before that
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="c-virtual_list__item">
+                <div class="c-message_kit__background p-message_pane_message__message c-message_kit__message">
+                    <div class="c-message_kit__hover">
+                        <div class="c-message_kit__actions c-message_kit__actions--above">
+                            <div class="c-message_kit__gutter">
+                                <div class="c-message_kit__gutter__left">
+                                    <div class="p-message_pane_message__compact_timestamp p-message_pane_message__compact_timestamp--light p-message_pane_message__compact_timestamp--adjacent">
+                                        <a class="c-link c-timestamp"
+                                           href="https://squarespace.slack.com/archives/C078WKY7VUZ/p1738253236320199"> <span
+                                                class="c-timestamp__label">11:07</span> </a></div>
+                                </div>
+                                <div class="c-message_kit__gutter__right"><span class="offscreen">Ashley Kim</span>
+                                    <div class="c-message_kit__blocks c-message_kit__blocks--rich_text">
+                                        <div class="c-message__message_blocks c-message__message_blocks--rich_text">
+                                            <div class="p-block_kit_renderer">
+                                                <div class="p-block_kit_renderer__block_wrapper p-block_kit_renderer__block_wrapper--first">
+                                                    <div class="p-rich_text_block">
+                                                        <div class="p-rich_text_section">the file usually uploads on thursday, so
+                                                            maybe we can wait till EOD to see which action to take?
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="output-section">
         <h2>Formatted Output</h2>
         <div id="output" class="output">
-<!--            <ul>-->
-<!--                <li><b>Juntoku Shimizu</b> [11:03AM]: Hm ok so if the pre migration account status is still MIGRATING_PAYMENTS that means we just need to dequeue?</li>-->
-<!--                <li><b>Ashley Kim</b> [11:06AM]:  sometimes that can mean that the PMs have been uploaded to Stripe and we just haven’t received the response yet <img className="inline-emoji"-->
-<!--                        src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f914@2x.png"-->
-<!--                        aria-label="thinking face emoji" alt=":thinking_face:" data-stringify-type="emoji"-->
-<!--                        data-stringify-emoji=":thinking_face:">-->
-<!--                    <br/>-->
-<!--                    <t/>-->
-<!--                    if that’s the case, then it will probs cause some issues in the migration pubsub if we rollback before that-->
-<!--                    <br/>-->
-<!--                    <t/>-->
-<!--                    the file usually uploads on thursday, so maybe we can wait till EOD to see which action to take?</li>-->
-<!--                <li><b>Juntoku Shimizu</b> [11:10AM]: <img className="inline-emoji"-->
-<!--                        src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f44d@2x.png"-->
-<!--                        aria-label="+1 emoji" alt=":+1:" data-stringify-type="emoji" data-stringify-emoji=":+1:"></li>-->
-<!--            </ul>-->
-<!--            <ul>-->
-<!--                <li><b>Ashley Kim</b> [12:53PM]: yeah that sounds good!</li>-->
-<!--                <li><b>Ashley Kim</b> [12:53PM]: yeah that sounds good!-->
-<!--                    <img src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f642@2x.png"-->
-<!--                         aria-label="slightly smiling face emoji" alt=":slightly_smiling_face:"-->
-<!--                         data-stringify-type="emoji" data-stringify-emoji=":slightly_smiling_face:"-->
-<!--                    >-->
-<!--                </li>-->
-<!--                <li><b>Ashley Kim</b> [12:53PM]: Thanks Sinead. <a href="google.com">@askim</a> are we blocked for the-->
-<!--                    time being? or can we still complete the SEPA updates while we wait for clarification on the data-->
-<!--                    retention?-->
-<!--                    <br/>-->
-<!--                    <t/>-->
-<!--                    Hey are we still on?-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--            <div>bold italic strikethrough link</div>-->
-<!--            <div>ordered list&nbsp;</div>-->
-<!--            <div>number two</div>-->
-<!--            <div>unorderlist</div>-->
-<!--            <div>number 2</div>-->
-<!--            <div><br></div>-->
-<!--            <div>block quote</div>-->
-<!--            <div>code</div>-->
-<!--            <div>code block.&nbsp;</div>-->
-<!--            <div>:np-4583:@clee&nbsp;<br><br><br></div>-->
         </div>
     </div>
 </div>
@@ -169,160 +159,178 @@ alt=":np-4583:" data-stringify-type="emoji" data-stringify-emoji=":np-4583:"
     // Clear the editor when it's clicked again
     editor.addEventListener('click', () => {
         // editor.innerHTML = null;
+        try {
+            formatSlackInput();
+        } catch (err) {
+            console.log(err);
+            output.innerText = err;
+        }
     });
 
     // Format on input
-    // editor.addEventListener('input', () => {
-        // formatInput2();
-
-        // Update output to reflect innerHTML
-        // const formattedContent = editor.innerHTML;
-        // output.innerHTML = formattedContent;
-        // const elems =  editor.innerHTML.querySelectorAll('*');
-        // elems.forEach(e => {
-        //     e.appendChild(document.createElement('br'));
-        // });
-        // output.textContent = editor.innerHTML;
-        // output.innerHTML = editor.innerHTML;
-    // });
-
-    // testingOutFormatForMe();
-    function testingOutFormatForMe() {
-        const tempContainer = document.createElement('div');
-
-        const bullet = document.createElement('li');
-        const name = document.createElement('b');
-        name.textContent = "Ashley Kim";
-        bullet.appendChild(name);
-        tempContainer.appendChild(bullet);
-        tempContainer.appendChild(name);
-
-        output.innerHTML = tempContainer.innerHTML;
-    }
-
-    function formatForInput() {
-        const pastedContent = editor.innerHTML;
-        // Clear the inner HTML of the editor
-        // Step 2: Create a temporary container element and set its innerHTML
-        const tempContainer = document.createElement('div');
-        tempContainer.innerHTML = pastedContent;
-
-        // Step 3: Loop through each child element and update the 'top' style
-        const elements = tempContainer.querySelectorAll('*');
-
-        // Remove the quick emoji react buttons
-        document.querySelectorAll('.c-message_actions__container').forEach(element => {
-            element.remove(); // Removes the element from the DOM
-        });
-        document.querySelectorAll('.c-message__actions').forEach(element => {
-            element.remove(); // Removes the element from the DOM
-        });
-        // Iterate through elements that weren't removed
-        elements.forEach(element => {
-            if (element.role == "listitem") {
-                element.style = {};
-                element.style.padding = "10px 0px";
-            }
-            if (element.style.width = '764px') {
-                console.log(element)
-                element.style.width = null;
-            }
-        });
-        editor.innerHTML = tempContainer.innerHTML;
-    }
-
-    function formatInput2() {
-        const pastedContent = editor.innerHTML;
-        // Clear the inner HTML of the editor
-        // Step 2: Create a temporary container element and set its innerHTML
-        const tempContainer = document.createElement('div');
-        const tempContainerElems = tempContainer.querySelectorAll('*');
-        // tempContainer.innerHTML = pastedContent;
-
-        // Step 3: Loop through each child element and update the 'top' style
-        const elements = editor.querySelectorAll('*');
-
-        // Remove the quick emoji react buttons
-        document.querySelectorAll('.c-message_actions__container').forEach(element => {
-            element.remove(); // Removes the element from the DOM
-        });
-        document.querySelectorAll('.c-message__actions').forEach(element => {
-            element.remove(); // Removes the element from the DOM
-        });
-
-        let name = null;
-        // Iterate through elements that weren't removed
-        elements.forEach(element => {
-            // If it's a name type
-            // console.log("className:" + element.className);
-            const bullet = document.createElement('li');
-            if (element.className == "c-link--button c-message__sender_button") {
-                const name = document.createElement('b');
-                name.textContent = element.innerHTML;
-                // add it
-                tempContainer.appendChild(name);
-                // tempContainerElems.appendChild(name);
-                console.log(name);
-            }
-            tempContainer.appendChild(bullet);
-        });
-        console.log(tempContainer);
-        console.log(tempContainerElems);
-        output.innerHTML = tempContainer.innerHTML;
-        // editor.innerHTML = tempContainer.innerHTML;
-    }
-
-    //// CHATGPT's SOLUTION
-   // editor.addEventListener('input', function() {
-   //      let editorContent = document.getElementById('editor').innerHTML;
-   //      // let viewOption = document.querySelector('input[name="view"]:checked');
-   //      // let showReactions = document.getElementById('show-reactions').checked;
-   //
-   //      // if (viewOption) {
-   //      //     if (viewOption.value === 'bullet') {
-   //              editorContent = convertToBulletView(editorContent);
-   //          // } else if (viewOption.value === 'table') {
-   //          //     editorContent = convertToTableView(editorContent);
-   //          // }
-   //      // }
-   //
-   //      // if (showReactions) {
-   //      //     editorContent = addReactions(editorContent);
-   //      // }
-   //
-   //      output.innerHTML = editorContent;
-   //  });
-   //
-    function convertToBulletView(content) {
-        return content.replace(/<div class="c-message_kit__blocks c-message_kit__blocks--rich_text.*?>(.*?)<\/div>/g, '<ul><li>$1</li></ul>');
-    }
-   //
-   //  function convertToTableView(content) {
-   //      return content.replace(/<div class="c-message_kit__blocks c-message_kit__blocks--rich_text.*?>(.*?)<\/div>/g, '<table><tr><td>$1</td></tr></table>');
-   //  }
-   //
-   //  function addReactions(content) {
-   //      const reactions = ['+1', 'ty', 'pin']; // You can expand this based on your emoji options
-   //      reactions.forEach(emoji => {
-   //          const emojiImg = `<img src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-small/${emoji}@2x.png" alt="${emoji}" />`;
-   //          content = content.replace(new RegExp(`<button.*?data-stringify-emoji="${emoji}".*?>.*?</button>`, 'g'), emojiImg);
-   //      });
-   //      return content;
-   //  }
-
-    editor.addEventListener('input', function() {
-
-        const content = editor.value;
-
-        // Call the function to replace the HTML blocks and format the content
-        const formattedContent = convertToBulletView(content);
-
-        // Inject the formatted HTML into the output div (using innerHTML to render HTML)
-        output.innerHTML = formattedContent;
+    editor.addEventListener('input', () => {
+        formatSlackInput();
+        // output.innerText = "hi";
     });
 
+    function removeQuickReactButtons() {
+        // document.querySelectorAll('.c-message_actions__container').forEach(element => {
+        //     element.remove(); // Removes the element from the DOM
+        // });
+        // document.querySelectorAll('.c-message__actions').forEach(element => {
+        //     element.remove(); // Removes the element from the DOM
+        // });
+        document.querySelectorAll('c-message_actions__container c-message__actions').forEach(element =>
+            element.remove()
+        );
+    }
 
-    </script>
+    function formatSlackInput() {
+        removeQuickReactButtons();
+        // 1. Create a temporary div that copies editor html
+        const tempDiv = document.createElement('div');
+        // tempDiv.id = "tempDiv"
+        // tempDiv.innerHTML = editor.innerHTML;
+        // Convert each message list item to a list item or whatever it should be interpreted as
+        // so each "c-virtual_list__item" will create a new li and append itself to the parent
+        // then we keep travelling through the children, determining what to add or what to remove
+        // 1. Create a temporary div that copies editor html
+        const blankDiv = document.createElement('ul');
+        Array.from(editor.children).forEach(child => {
+
+            // processChildren(child)
+            // output.innerText += child + "\n"
+            console.dir(child)
+            blankDiv.append(...processChildren(child));
+        });
+        tempDiv.appendChild(blankDiv)
+        // move through the children,
+        // Set output div to be equal to temporary div
+        output.innerHTML = tempDiv.innerHTML;
+    }
+
+    function processChildren(element) {
+        console.log("processing: " + element.className)
+        let transformedNode = null;
+        if (element.getAttribute("id") == "tempDiv") {
+            transformedNode = document.createElement('div');
+        }
+        if (element.className == "c-virtual_list__item") {
+            transformedNode = document.createElement('li');
+            // console.log("this is a li:")
+            // console.dir(element)
+        }
+        if (element.className == "c-link--button c-message__sender_button") {
+            transformedNode = document.createElement("b");
+            transformedNode.innerHTML = element.innerHTML;
+        }
+        if (element.className == "c-timestamp__label") {
+            transformedNode = document.createElement("span");
+            // transformedNode.innerHTML += " ";
+            transformedNode.innerHTML = " " + element.innerHTML;
+            transformedNode.innerHTML += ": ";
+        }
+        if (element.className == "p-rich_text_section") {
+            // printToOutput(element.innerText);
+
+            transformedNode = document.createElement('span');
+            // const p = document.createElement("pp");
+            // p.innerHTML = "<b>name </b>:";
+            // transformedNode.appendChild( p)
+            const br = document.createElement("br"); // Create the <br> element
+            const t = document.createElement("t"); // Create the <t> element (though <t> is not a standard HTML tag)
+            t.textContent = element.innerText; // Add text to <t>
+            transformedNode.appendChild(br)
+            transformedNode.appendChild(t)
+            // transformedNode.appendChild(document.createElement('br'));
+            // transformedNode.appendChild(document.createElement('t'));
+            // transformedNode.innerText = element.innerText;
+            // transformedNode.innerText = "fuuuuu";
+            // output.innerText += element.innerText + "\n";
+            // console.log("returning myself" + element.className)
+            // console.dir([transformedNode])
+            return [transformedNode];
+        }
+        if (transformedNode == null) {
+            // console.log("no match for " + element.className)
+        }
+        if (transformedNode == null && element.children == null) {
+            // output.innerText += element.className + " is the end, null and no children.\n";
+            return [];
+        }
+        if (transformedNode != null) {
+            if (transformedNode.tagName == "LI") {
+                console.log("this is a li:")
+                console.dir(element)
+                // }
+                // Array.from(element.children).forEach(child =>
+                //     // const transformedChild = processChildren(child);
+                //     appendChildrenToNode(processChildren(child))
+                // );
+                let chillen = Array.from(element.children).map(child => processChildren(child));
+                // if (chillen != null || c.length != 0 ) {
+                //     console.log("flat:");
+                //     console.dir(chillen.flat())
+                //     // return chillen.flat();
+                // } else {
+                //     console.log("no chillen worth processing");
+                // }
+                transformedNode.append(...chillen.flat());
+            }
+            // console.log("after all that")
+            // console.dir([transformedNode])
+            return [transformedNode];
+        }
+        if (transformedNode == null && element.children != null) {
+            // console.log("has chillen tho " + element.className)
+            // console.dir(element.children)
+            let chillen = Array.from(element.children).map(child => processChildren(child));
+            // console.log("processed:");
+            // console.dir(chillen)
+            if (chillen != null || c.length != 0 ) {
+                // console.log("flat:");
+                // console.dir(chillen.flat())
+                return chillen.flat();
+            } else {
+                // console.log("no chillen worth processing");
+            }
+
+            // printToOutput(element.className + ":: is useless, but their children may not be");
+            // if i am useless but my children are not useless, then return them as though they were myself
+            // c = Array.from(element.children).map(child => {
+            //     processChildren(child)
+            // }).flat();
+            // if (c != null || c.length != 0) {
+            //     printToOutput(element.className + ":: WAS NOT USELESS SLAYY");
+            // }
+            // return c;
+        }
+        // const transformedChildren = Array.from(element.children).map(child => processChildren(child));
+
+        return [];
+        // return transformedNode;
+    }
+
+    // assuming children is an array
+    function appendChildrenToNode(node, children) {
+        if (children != null) {
+            for (let child in children) {
+                console.log("append this to the node")
+                console.dir(child)
+                node.appendChild(child);
+            }
+        }
+        // if (children != null && children.length != 0) {
+        //     printToOutput("i have children!" + children)
+        //     node.append(...children);
+        // }
+    }
+
+    function printToOutput(str) {
+        output.innerText += str + "\n";
+    }
+
+</script>
 </body>
 
 </html>
