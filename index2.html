@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich Text Editor</title>
+    <link rel="stylesheet" href="/richtexteditor/rte_theme_default.css" />
+    <script type="text/javascript" src="/richtexteditor/rte.js"></script>
+    <script type="text/javascript" src='/richtexteditor/plugins/all_plugins.js'></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+        }
+
+        .input-section, .output-section {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .input-section {
+            border-right: 2px solid #ddd;
+        }
+
+        .output-section {
+            background-color: #f9f9f9;
+        }
+
+        /* .editor {
+            width: 100%;
+            height: 90%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        } */
+         #editor {
+            width: 100%;
+            height: 100%;
+         }
+
+        .output {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        #div_editor1 {
+            width: 100%;
+            height: 500px;
+            background: #000;
+        }
+        .c-virtual_list__item {
+            padding: 5px 0px;
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <!-- <div id="div_editor1" >
+        <p>Initial Document Content</p>
+    </div> -->
+    <div class="container">
+        <div class="input-section">
+            <h2>Rich Text Editor</h2>
+            <div id="editor" class="editor" contenteditable="true" placeholder="Type something...">
+            </div>
+        </div>
+        <div class="output-section">
+            <h2>Formatted Output</h2>
+            <div id="output" class="output">Your formatted output will appear here.</div>
+        </div>
+    </div>
+    <script>
+        const editor = document.getElementById('editor');
+        const output = document.getElementById('output');
+
+        editor.addEventListener('input', () => {
+            const formattedContent = editor.innerHTML;
+            output.innerHTML = formattedContent;
+            reformatInput();
+        });
+
+        function reformatInput() {
+            // const pastedContent = editor.innerHTML; 
+            // const elements = tempContainer.querySelectorAll('*');
+            // elements.forEach(element => {
+            // // Modify the 'top' field in the style
+            // element.style.top = '50px'; // Example value, you can adjust as needed
+            // });
+
+            // Step 1: Get the innerHTML of the div
+            const divContent = editor.innerHTML;
+
+            // Step 2: Create a temporary container element and set its innerHTML
+            const tempContainer = document.createElement('div');
+            tempContainer.innerHTML = divContent;
+            // Step 3: Loop through each child element and update the 'top' style
+            const elements = tempContainer.querySelectorAll('*');
+            console.log("elements before");
+            console.log(elements);
+            elements.forEach(element => {
+                // Modify the 'top' field in the style
+                // element.style = {};
+                // element.style.top = null; // Example value, you can adjust as needed
+                // element.style.padding = "10px 0px";
+                // element.style.position = null;
+            });
+            console.log("elements after");
+            console.log(elements);
+            // Step 4: Optionally, you can update the original div if needed
+            editor.innerHTML = tempContainer.innerHTML;
+        }
+    </script>
+</body>
+</html>

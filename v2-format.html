@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Formatter</title>
+  <style>
+    body {
+      display: flex;
+      height: 100vh;
+      padding: 10px;
+      background-color: #f3f3f3;
+    }
+    .container {
+      width: 50%;
+      padding: 10px;
+    }
+    .bordered {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: white;
+      padding: 10px;
+      height: 100%;
+      overflow-y: auto;
+    }
+    .button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background-color: blue;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+<div class="container" style="border-right: 1px solid #ccc;">
+  <h2>Paste your content</h2>
+  <div id="input" contenteditable="true" class="bordered"></div>
+</div>
+
+<div class="container">
+  <h2>Formatted Output</h2>
+  <div>
+    <label><input type="radio" name="format" value="bullets" checked> Bullet View</label>
+    <label><input type="radio" name="format" value="table"> Table View</label>
+    <label><input type="checkbox" id="showReactions"> Show Reactions</label>
+  </div>
+  <button onclick="formatText()" class="button">Format</button>
+  <div id="output" class="bordered" style="margin-top: 10px;"></div>
+</div>
+
+<script>
+  function formatText() {
+    const inputText = document.getElementById("input").innerText;
+    const outputDiv = document.getElementById("output");
+    const formatType = document.querySelector('input[name="format"]:checked').value;
+    const showReactions = document.getElementById("showReactions").checked;
+
+    let formattedText = "";
+
+    if (formatType === "bullets") {
+      formattedText = inputText.split('\n').map(line => `• ${line}`).join('<br>');
+    } else if (formatType === "table") {
+      formattedText = "<table><tbody>";
+      inputText.split('\n').forEach(line => {
+        formattedText += `<tr><td>${line}</td></tr>`;
+      });
+      formattedText += "</tbody></table>";
+    }
+
+    if (showReactions) {
+      formattedText += "<br>😊 👍 ❤️";
+    }
+
+    outputDiv.innerHTML = formattedText;
+  }
+</script>
+</body>
+</html>

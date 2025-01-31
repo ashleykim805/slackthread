@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reformat for Google Docs</title>
+<!--  <link rel="stylesheet" href="style.css">-->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+    }
+
+    .left-panel, .right-panel {
+      padding: 20px;
+      width: 50%;
+    }
+
+    .editor {
+      min-height: 300px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    h2 {
+      font-size: 1.5em;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="left-panel">
+    <h2>Paste your content here</h2>
+    <div contenteditable="true" class="editor" id="editor">
+      <!-- Content will be pasted here -->
+    </div>
+  </div>
+  <div class="right-panel">
+    <h2>Formatting Options</h2>
+    <label for="bullet-view">
+      <input type="radio" id="bullet-view" name="view" value="bullet"> Bullet View
+    </label>
+    <label for="table-view">
+      <input type="radio" id="table-view" name="view" value="table"> Table View
+    </label>
+    <label for="show-reactions">
+      <input type="checkbox" id="show-reactions" value="reactions"> Show Reactions
+    </label>
+    <button id="apply-format">Apply Format</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

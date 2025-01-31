@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slack Thread Editor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+        }
+
+        .input-section,
+        .output-section {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .input-section {
+            border-right: 2px solid #ddd;
+        }
+
+        .output-section {
+            /*background-color: #f9f9f9;*/
+        }
+
+        .editor {
+            width: 100%;
+            height: 90%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor:focus {
+            outline: none;
+        }
+
+        li img {
+            width: 1em;
+            /* Match text size */
+            height: 1em;
+            /* Ensure square aspect ratio */
+            vertical-align: -0.2em;
+            /* Adjust alignment slightly */
+        }
+
+        .output {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<!--
+my notes:
+bold is in b duh
+<b data-stringify-type="bold" style="box-sizing: inherit;">
+
+italic is in i
+<i data-stringify-type="italic" style="box-sizing: inherit;">italic</i>
+
+strikethrough <s data-stringify-type="strike" style="box-sizing: inherit;">strikethrough</s>
+
+ordered list
+ <ol data-stringify-type="ordered-list" data-list-tree="true"
+        class="p-rich_text_list p-rich_text_list__ordered p-rich_text_list--nested" data-indent="0" data-border="0"
+        style="box-sizing: inherit; margin: 0px; padding: 0px;">
+
+
+blockquote
+<blockquote type="cite" class="c-mrkdwn__quote" data-stringify-type="quote"
+                style="box-sizing: inherit; margin: 4px 0px; padding: 0px 0px 0px 16px; position: relative;">block quote
+    </blockquote>
+
+code
+<code data-stringify-type="code" class="c-mrkdwn__code"
+
+code block
+<div class="p-rich_text_block--no-overflow"
+
+tagging others
+<a
+            target="_blank" class="c-link c-member_slug c-member_slug--light c-member_slug--link"
+            data-member-id="U019C91MZ0Q" data-member-label="@clee" data-stringify-type="mention"
+            data-stringify-id="U019C91MZ0Q" data-stringify-label="@clee" tabindex="0" aria-hidden="false"
+            href="https://squarespace.slack.com/team/U019C91MZ0Q" rel="noopener noreferrer"
+
+
+<img src="https://emoji.slack-edge.com/T01Q44F43U7/np-4583/b2afb033ddbecddc.png" aria-label="np 4583 emoji"
+alt=":np-4583:" data-stringify-type="emoji" data-stringify-emoji=":np-4583:"
+-->
+<body>
+<div class="container">
+    <div class="input-section">
+        <h2>Rich Text Editor</h2>
+        <div id="editor" class="editor" contenteditable="true" placeholder="Type something..."></div>
+    </div>
+    <div class="output-section">
+        <h2>Formatted Output</h2>
+        <div id="output" class="output">
+<!--            <ul>-->
+<!--                <li><b>Juntoku Shimizu</b> [11:03AM]: Hm ok so if the pre migration account status is still MIGRATING_PAYMENTS that means we just need to dequeue?</li>-->
+<!--                <li><b>Ashley Kim</b> [11:06AM]:  sometimes that can mean that the PMs have been uploaded to Stripe and we just haven’t received the response yet <img className="inline-emoji"-->
+<!--                        src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f914@2x.png"-->
+<!--                        aria-label="thinking face emoji" alt=":thinking_face:" data-stringify-type="emoji"-->
+<!--                        data-stringify-emoji=":thinking_face:">-->
+<!--                    <br/>-->
+<!--                    <t/>-->
+<!--                    if that’s the case, then it will probs cause some issues in the migration pubsub if we rollback before that-->
+<!--                    <br/>-->
+<!--                    <t/>-->
+<!--                    the file usually uploads on thursday, so maybe we can wait till EOD to see which action to take?</li>-->
+<!--                <li><b>Juntoku Shimizu</b> [11:10AM]: <img className="inline-emoji"-->
+<!--                        src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f44d@2x.png"-->
+<!--                        aria-label="+1 emoji" alt=":+1:" data-stringify-type="emoji" data-stringify-emoji=":+1:"></li>-->
+<!--            </ul>-->
+<!--            <ul>-->
+<!--                <li><b>Ashley Kim</b> [12:53PM]: yeah that sounds good!</li>-->
+<!--                <li><b>Ashley Kim</b> [12:53PM]: yeah that sounds good!-->
+<!--                    <img src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-medium/1f642@2x.png"-->
+<!--                         aria-label="slightly smiling face emoji" alt=":slightly_smiling_face:"-->
+<!--                         data-stringify-type="emoji" data-stringify-emoji=":slightly_smiling_face:"-->
+<!--                    >-->
+<!--                </li>-->
+<!--                <li><b>Ashley Kim</b> [12:53PM]: Thanks Sinead. <a href="google.com">@askim</a> are we blocked for the-->
+<!--                    time being? or can we still complete the SEPA updates while we wait for clarification on the data-->
+<!--                    retention?-->
+<!--                    <br/>-->
+<!--                    <t/>-->
+<!--                    Hey are we still on?-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--            <div>bold italic strikethrough link</div>-->
+<!--            <div>ordered list&nbsp;</div>-->
+<!--            <div>number two</div>-->
+<!--            <div>unorderlist</div>-->
+<!--            <div>number 2</div>-->
+<!--            <div><br></div>-->
+<!--            <div>block quote</div>-->
+<!--            <div>code</div>-->
+<!--            <div>code block.&nbsp;</div>-->
+<!--            <div>:np-4583:@clee&nbsp;<br><br><br></div>-->
+        </div>
+    </div>
+</div>
+
+<script>
+    const editor = document.getElementById('editor');
+    const output = document.getElementById('output');
+
+    // Clear the editor when it's clicked again
+    editor.addEventListener('click', () => {
+        // editor.innerHTML = null;
+    });
+
+    // Format on input
+    // editor.addEventListener('input', () => {
+        // formatInput2();
+
+        // Update output to reflect innerHTML
+        // const formattedContent = editor.innerHTML;
+        // output.innerHTML = formattedContent;
+        // const elems =  editor.innerHTML.querySelectorAll('*');
+        // elems.forEach(e => {
+        //     e.appendChild(document.createElement('br'));
+        // });
+        // output.textContent = editor.innerHTML;
+        // output.innerHTML = editor.innerHTML;
+    // });
+
+    // testingOutFormatForMe();
+    function testingOutFormatForMe() {
+        const tempContainer = document.createElement('div');
+
+        const bullet = document.createElement('li');
+        const name = document.createElement('b');
+        name.textContent = "Ashley Kim";
+        bullet.appendChild(name);
+        tempContainer.appendChild(bullet);
+        tempContainer.appendChild(name);
+
+        output.innerHTML = tempContainer.innerHTML;
+    }
+
+    function formatForInput() {
+        const pastedContent = editor.innerHTML;
+        // Clear the inner HTML of the editor
+        // Step 2: Create a temporary container element and set its innerHTML
+        const tempContainer = document.createElement('div');
+        tempContainer.innerHTML = pastedContent;
+
+        // Step 3: Loop through each child element and update the 'top' style
+        const elements = tempContainer.querySelectorAll('*');
+
+        // Remove the quick emoji react buttons
+        document.querySelectorAll('.c-message_actions__container').forEach(element => {
+            element.remove(); // Removes the element from the DOM
+        });
+        document.querySelectorAll('.c-message__actions').forEach(element => {
+            element.remove(); // Removes the element from the DOM
+        });
+        // Iterate through elements that weren't removed
+        elements.forEach(element => {
+            if (element.role == "listitem") {
+                element.style = {};
+                element.style.padding = "10px 0px";
+            }
+            if (element.style.width = '764px') {
+                console.log(element)
+                element.style.width = null;
+            }
+        });
+        editor.innerHTML = tempContainer.innerHTML;
+    }
+
+    function formatInput2() {
+        const pastedContent = editor.innerHTML;
+        // Clear the inner HTML of the editor
+        // Step 2: Create a temporary container element and set its innerHTML
+        const tempContainer = document.createElement('div');
+        const tempContainerElems = tempContainer.querySelectorAll('*');
+        // tempContainer.innerHTML = pastedContent;
+
+        // Step 3: Loop through each child element and update the 'top' style
+        const elements = editor.querySelectorAll('*');
+
+        // Remove the quick emoji react buttons
+        document.querySelectorAll('.c-message_actions__container').forEach(element => {
+            element.remove(); // Removes the element from the DOM
+        });
+        document.querySelectorAll('.c-message__actions').forEach(element => {
+            element.remove(); // Removes the element from the DOM
+        });
+
+        let name = null;
+        // Iterate through elements that weren't removed
+        elements.forEach(element => {
+            // If it's a name type
+            // console.log("className:" + element.className);
+            const bullet = document.createElement('li');
+            if (element.className == "c-link--button c-message__sender_button") {
+                const name = document.createElement('b');
+                name.textContent = element.innerHTML;
+                // add it
+                tempContainer.appendChild(name);
+                // tempContainerElems.appendChild(name);
+                console.log(name);
+            }
+            tempContainer.appendChild(bullet);
+        });
+        console.log(tempContainer);
+        console.log(tempContainerElems);
+        output.innerHTML = tempContainer.innerHTML;
+        // editor.innerHTML = tempContainer.innerHTML;
+    }
+
+    //// CHATGPT's SOLUTION
+   // editor.addEventListener('input', function() {
+   //      let editorContent = document.getElementById('editor').innerHTML;
+   //      // let viewOption = document.querySelector('input[name="view"]:checked');
+   //      // let showReactions = document.getElementById('show-reactions').checked;
+   //
+   //      // if (viewOption) {
+   //      //     if (viewOption.value === 'bullet') {
+   //              editorContent = convertToBulletView(editorContent);
+   //          // } else if (viewOption.value === 'table') {
+   //          //     editorContent = convertToTableView(editorContent);
+   //          // }
+   //      // }
+   //
+   //      // if (showReactions) {
+   //      //     editorContent = addReactions(editorContent);
+   //      // }
+   //
+   //      output.innerHTML = editorContent;
+   //  });
+   //
+    function convertToBulletView(content) {
+        return content.replace(/<div class="c-message_kit__blocks c-message_kit__blocks--rich_text.*?>(.*?)<\/div>/g, '<ul><li>$1</li></ul>');
+    }
+   //
+   //  function convertToTableView(content) {
+   //      return content.replace(/<div class="c-message_kit__blocks c-message_kit__blocks--rich_text.*?>(.*?)<\/div>/g, '<table><tr><td>$1</td></tr></table>');
+   //  }
+   //
+   //  function addReactions(content) {
+   //      const reactions = ['+1', 'ty', 'pin']; // You can expand this based on your emoji options
+   //      reactions.forEach(emoji => {
+   //          const emojiImg = `<img src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-small/${emoji}@2x.png" alt="${emoji}" />`;
+   //          content = content.replace(new RegExp(`<button.*?data-stringify-emoji="${emoji}".*?>.*?</button>`, 'g'), emojiImg);
+   //      });
+   //      return content;
+   //  }
+
+    editor.addEventListener('input', function() {
+
+        const content = editor.value;
+
+        // Call the function to replace the HTML blocks and format the content
+        const formattedContent = convertToBulletView(content);
+
+        // Inject the formatted HTML into the output div (using innerHTML to render HTML)
+        output.innerHTML = formattedContent;
+    });
+
+
+    </script>
+</body>
+
+</html>

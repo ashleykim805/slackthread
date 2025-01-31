@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Formatter</title>
+    <title>Rich Text Editor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
-            /* display: table-column; */
             height: 100vh;
         }
 
@@ -33,17 +32,6 @@
             background-color: #f9f9f9;
         }
 
-        #inputText {
-            width: 100%;
-            height: 90%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 16px;
-            resize: none;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
         .editor {
             width: 100%;
             height: 90%;
@@ -53,8 +41,14 @@
             font-size: 16px;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
-        
+
+        .editor:focus {
+            outline: none;
+        }
+
         .output {
             padding: 10px;
             font-size: 16px;
@@ -65,16 +59,10 @@
 </head>
 <body>
     <div class="container">
-        
         <div class="input-section">
             <h2>Rich Text Editor</h2>
-            <div id="inputText" class="editor" contenteditable="true" placeholder="Type something..."></div>
+            <div id="editor" class="editor" contenteditable="true" placeholder="Type something..."></div>
         </div>
-        <!-- <div class="input-section">
-            <h2>Input</h2>
-            <textarea id="inputText" placeholder="Type something..."></textarea>
-        </div> -->
-        
         <div class="output-section">
             <h2>Formatted Output</h2>
             <div id="output" class="output">Your formatted output will appear here.</div>
@@ -82,22 +70,20 @@
     </div>
 
     <script>
-        const inputText = document.getElementById('inputText');
+        const editor = document.getElementById('editor');
         const output = document.getElementById('output');
 
-        inputText.addEventListener('input', () => {
-            // console.log(inputText)
-            // const text = inputText.value;
-            // // Format the text as desired; here, an example of wrapping with <strong>
-            // let formattedText = text
-            //     .split('\n')
-            //     .map(line => `<strong>${line}</strong>`)
-            //     .join('<br>');
-            // formattedText = text;
+        editor.addEventListener('input', () => {
+            const formattedContent = editor.innerHTML;
+            output.innerHTML = formattedContent;
+        });
 
-            // output.innerHTML = formattedText;
+        // Prevent pasting outside the editor bounds
+        editor.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text');
+            document.execCommand('insertText', false, text);
         });
     </script>
 </body>
 </html>
-
