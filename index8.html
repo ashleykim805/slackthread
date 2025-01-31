@@ -209,6 +209,18 @@
         output.innerHTML = tempDiv.innerHTML;
     }
 
+    function processNameLabel(element) {
+        const name = document.createElement("b");
+        name.innerText = element.innerText;
+        return name;
+    }
+
+    function processTimestamp(element) {
+        const timestamp = document.createElement("span");
+        timestamp.innerText = " [" + element.innerText + "]: ";
+        return timestamp;
+    }
+
     function processChildren(element) {
         // console.log("processing: " + element.className)
         let transformedNode = null;
@@ -221,30 +233,26 @@
             // console.dir(element)
         }
         if (element.className == "c-link--button c-message__sender_button") {
-            transformedNode = document.createElement("b");
-            transformedNode.innerHTML = null;
-            transformedNode.innerText = element.innerText;
-            console.dir([transformedNode]);
-            return [ transformedNode ];
+            transformedNode = processNameLabel(element)
         }
         if (element.className == "c-timestamp__label") {
-            transformedNode = document.createElement("span");
-            // transformedNode.innerHTML += " ";
-            transformedNode.innerText = " " + element.innerText;
-            transformedNode.innerText += ": ";
+            transformedNode = processTimestamp(element)
         }
         if (element.className == "p-rich_text_section") {
-            // printToOutput(element.innerText);
-
+            console.dir(element)
+            for (let child in Array.from(element.children)) {
+                console.log(child.tagName)
+                console.log(child.tag)
+                console.dir(child)
+            }
             transformedNode = document.createElement('span');
-            // const p = document.createElement("pp");
-            // p.innerHTML = "<b>name </b>:";
-            // transformedNode.appendChild( p)
             const br = document.createElement("br"); // Create the <br> element
             const t = document.createElement("t"); // Create the <t> element (though <t> is not a standard HTML tag)
-            t.textContent = element.innerText; // Add text to <t>
+            const message = document.createElement('span');
+            message.innerText = element.innerText;
             transformedNode.appendChild(br)
             transformedNode.appendChild(t)
+            transformedNode.appendChild(message)
             // transformedNode.appendChild(document.createElement('br'));
             // transformedNode.appendChild(document.createElement('t'));
             // transformedNode.innerText = element.innerText;
@@ -252,7 +260,7 @@
             // output.innerText += element.innerText + "\n";
             // console.log("returning myself" + element.className)
             // console.dir([transformedNode])
-            return [transformedNode];
+            // return transformedNode;
         }
         if (transformedNode == null) {
             // console.log("no match for " + element.className)
