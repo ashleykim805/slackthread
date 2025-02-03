@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- THIS VERSION TRAVERSES THE CHILD NODES RECURSIVELY -->
+<!-- FREAKING RICH TEXT BLOCK R U KIDDING MEEEE -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slack Thread Editor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+        }
+
+        .input-section,
+        .output-section {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .input-section {
+            border-right: 2px solid #ddd;
+        }
+
+        .output-section {
+            /*background-color: #f9f9f9;*/
+        }
+
+        .editor {
+            width: 100%;
+            height: 90%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor:focus {
+            outline: none;
+        }
+
+        li img {
+            width: 1em;
+            /* Match text size */
+            height: 1em;
+            /* Ensure square aspect ratio */
+            vertical-align: -0.2em;
+            /* Adjust alignment slightly */
+        }
+
+        .output {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="input-section">
+        <h2>Rich Text Editor</h2>
+        <div id="editor" class="editor" contenteditable="true" placeholder="Type something...">
+<!--            can u do this one thing plsss-->
+            <div class="p-rich_text_section">regular text here<br>
+                <b>bold</b>&nbsp;<i>italic</i>&nbsp;<s>strikethrough</s>&nbsp;<a
+                        class="c-link c-link--underline" href="http://facebook.com/">link</a>&nbsp;anddd regular
+                text again<br>
+            </div>
+        </div>
+    </div>
+    <div class="output-section">
+        <h2>Formatted Output</h2>
+        <div id="output" class="output">
+        </div>
+    </div>
+</div>
+
+<script>
+    const editor = document.getElementById('editor');
+    const output = document.getElementById('output');
+
+    // Clear the editor when it's clicked again
+    editor.addEventListener('click', () => {
+        // editor.innerHTML = null;
+        try {
+            formatSlackInput();
+        } catch (err) {
+            console.log(err);
+            output.innerText = err;
+        }
+    });
+
+    // Format on input
+    editor.addEventListener('input', () => {
+        formatSlackInput();
+        // output.innerText = "hi";
+    });
+
+    function removeQuickReactButtons() {
+        document.querySelectorAll('c-message_actions__container c-message__actions').forEach(element =>
+            element.remove()
+        );
+    }
+
+    function formatSlackInput() {
+        removeQuickReactButtons();
+        // 1. Create a temporary div to hold the changes
+        const tempDiv = document.createElement('div');
+        // tempDiv.innerHTML = editor.innerHTML;
+        // 2. Create the element to which i add the recursive elements
+        const blankDiv = document.createElement('ul');
+        const processedChildren = Array.from(editor.childNodes).map(child => processChildren2(child)).flat();
+        console.log('process children')
+        console.dir(processedChildren)
+        blankDiv.append(...processedChildren)
+        // blankDiv.append(...processChildren(editor))
+        // 3. Append the element to the
+        tempDiv.appendChild(blankDiv)
+        output.innerHTML = tempDiv.innerHTML;
+    }
+
+    /**
+     * Given an element, returns a list of nodes that should be appended to its parent
+     */
+    function processChildren2(node) {
+        // console.dir(node)
+        let transformedNode = document.createElement('span');
+        transformedNode.className = "useless";
+        if (node.nodeType === Node.TEXT_NODE) {
+            return [ document.createTextNode(node.textContent) ];
+        }
+        if (node.tagName == "B") {
+            transformedNode = document.createElement('b')
+        }
+        if (node.tagName == "I") {
+            transformedNode = document.createElement('i')
+        }
+        if (node.tagName == "S") {
+            transformedNode = document.createElement('s')
+        }
+        if (node.className == "c-link c-link--underline") {
+            transformedNode = document.createElement('a');
+            transformedNode.href = node.href;
+        }
+        if (node.className == "p-rich_text_section") {
+            transformedNode = document.createElement('span');
+            transformedNode.appendChild(document.createElement('br'))
+            transformedNode.appendChild(document.createElement('t'))
+        }
+        if (node.className == "c-virtual_list__item") {
+            transformedNode = document.createElement('li');
+        }
+        const isUseless = transformedNode.className != null && transformedNode.className == "useless";
+        const processedChildren = Array.from(node.childNodes).map(child => processChildren2(child));
+        const hasUselessChildren = processedChildren.flat().length == 0;
+        if (isUseless && hasUselessChildren) {
+            return [];
+        }
+        if (isUseless && !hasUselessChildren) {
+            return processedChildren.flat();
+        }
+        transformedNode.append(...processedChildren.flat())
+        // processedChildren.flat().forEach((processedChild) => transformedNode.appendChild(processedChild))
+        return [ transformedNode ]
+        // if (!isUseless && hasUselessChildren) {
+        //     return [ transformedNode ]
+        // }
+        // if (!isUseless && !hasUselessChildren) {
+        //     transformedNode.append(...processedChildren.flat())
+        //     // processedChildren.flat().forEach((processedChild) => transformedNode.appendChild(processedChild))
+        //     return [ transformedNode ]
+        // }
+    }
+
+    function processChildren(element) {
+        let transformedNode = null;
+        if (element.className == "c-virtual_list__item") {
+            transformedNode = document.createElement('li');
+            // console.log("this is a li:")
+            // console.dir(element)
+        }
+        if (element.className == "c-link--button c-message__sender_button") {
+            transformedNode = processNameLabel(element)
+        }
+        if (element.className == "c-timestamp__label") {
+            transformedNode = processTimestamp(element)
+        }
+        if (element.className == "p-rich_text_section") {
+            transformedNode = document.createElement('span');
+            transformedNode.appendChild(document.createElement("br"))
+            transformedNode.appendChild(document.createElement("t"))
+            const message = document.createElement('span');
+            transformedNode.appendChild(message)
+        }
+        if (transformedNode == null && element.children == null) {
+            // output.innerText += element.className + " is the end, null and no children.\n";
+            return [];
+        }
+        if (transformedNode != null) {
+            if (transformedNode.tagName == "LI") {
+                // console.log("this is a li:")
+                // console.dir(element)
+                // }
+                // Array.from(element.children).forEach(child =>
+                //     // const transformedChild = processChildren(child);
+                //     appendChildrenToNode(processChildren(child))
+                // );
+                let chillen = Array.from(element.children).map(child => processChildren(child));
+                // if (chillen != null || c.length != 0 ) {
+                //     console.log("flat:");
+                //     console.dir(chillen.flat())
+                //     // return chillen.flat();
+                // } else {
+                //     console.log("no chillen worth processing");
+                // }
+                transformedNode.append(...chillen.flat());
+            }
+            // console.log("after all that")
+            // console.dir([transformedNode])
+            return [transformedNode];
+        }
+        if (transformedNode == null && element.children != null) {
+            // console.log("has chillen tho " + element.className)
+            // console.dir(element.children)
+            let chillen = Array.from(element.children).map(child => processChildren(child));
+            // console.log("processed:");
+            // console.dir(chillen)
+            if (chillen != null || c.length != 0 ) {
+                // console.log("flat:");
+                // console.dir(chillen.flat())
+                return chillen.flat();
+            } else {
+                // console.log("no chillen worth processing");
+            }
+
+            // printToOutput(element.className + ":: is useless, but their children may not be");
+            // if i am useless but my children are not useless, then return them as though they were myself
+            // c = Array.from(element.children).map(child => {
+            //     processChildren(child)
+            // }).flat();
+            // if (c != null || c.length != 0) {
+            //     printToOutput(element.className + ":: WAS NOT USELESS SLAYY");
+            // }
+            // return c;
+        }
+        // const transformedChildren = Array.from(element.children).map(child => processChildren(child));
+
+        return [];
+        // return transformedNode;
+    }
+
+    // assuming children is an array
+    function appendChildrenToNode(node, children) {
+        if (children != null) {
+            for (let child in children) {
+                console.log("append this to the node")
+                console.dir(child)
+                node.appendChild(child);
+            }
+        }
+        // if (children != null && children.length != 0) {
+        //     printToOutput("i have children!" + children)
+        //     node.append(...children);
+        // }
+    }
+
+    function printToOutput(str) {
+        output.innerText += str + "\n";
+    }
+
+</script>
+</body>
+
+</html>

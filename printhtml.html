@@ -76,12 +76,24 @@
     </div>
     <div class="output-section">
         <h2>Formatted Output</h2>
+        <button onclick="copyToClipboard()">copy</button>
         <pre id="output" style="border: 1px solid black; padding: 10px; margin-top: 10px; white-space: pre-wrap;"></pre>
 <!--        <div id="output" class="output">-->
         </div>
     </div>
 </div>
+<script>
+    function copyToClipboard() {
+        const output = document.getElementById("output");
+        const text = output.innerText; // Use `.innerHTML` if you want HTML
 
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Copied to clipboard!");
+        }).catch(err => {
+            console.error("Failed to copy:", err);
+        });
+    }
+</script>
 <script>
     const editor = document.getElementById('editor');
     const output = document.getElementById('output');
@@ -141,7 +153,7 @@
         tempDiv.innerHTML = editor.innerHTML.trim(); // Trim to remove extra spaces
 
         // Pretty print using indentation
-        output.innerText = formatHTML(tempDiv.innerHTML);
+        output.innerText = formatHTML2(tempDiv.innerHTML);
     }
 
     // // Function to format HTML with indentation
@@ -164,7 +176,41 @@
             if (element.match(/^<?\w[^>]*[^\/]$/) && !element.startsWith("!")) indent += 1; // Opening tag → increase indent
         });
 
+        formatted = formatted.slice(1, formatted.length - 2)
+
         return formatted.trim();
+    }
+
+    function formatHTML2(html) {
+        const tabSize = 4;
+        let formatted = '', indent = -1;
+        console.log('beginning formatting')
+        html.match(/<([^>]+)>/g).forEach(element => {
+            let isEndingElement = element.charAt(1) === '/';
+            if (isEndingElement) {
+                indent--;
+            }
+
+            console.log(element)
+            if (element.length >=3 && element.substring(0,3) == '<br') {
+                formatted += ' '.repeat(indent * tabSize) + element + '\n';
+                return;
+            }
+            if (element.length >=4 && element.substring(0,4) == '<img') {
+                formatted += ' '.repeat(indent * tabSize) + element + '\n';
+                return;
+            }
+
+            if (indent < 0) indent = 0;
+
+            formatted += ' '.repeat(indent * tabSize) + element + '\n';
+
+
+            if (!isEndingElement) {
+                indent++;
+            }
+        })
+        return formatted;
     }
 
     // Clear the editor when it's clicked again
