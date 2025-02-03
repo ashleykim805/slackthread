@@ -181,35 +181,71 @@
         return formatted.trim();
     }
 
+    // function formatHTML2(html) {
+    //     const tabSize = 4;
+    //     let formatted = '', indent = -1;
+    //     console.log('beginning formatting')
+    //     html.match(/<([^>]+)>/g).forEach(element => {
+    //         let isEndingElement = element.charAt(1) === '/';
+    //         if (isEndingElement) {
+    //             indent--;
+    //         }
+    //
+    //         console.log(element)
+    //         if (element.length >=3 && element.substring(0,3) == '<br') {
+    //             formatted += ' '.repeat(indent * tabSize) + element + '\n';
+    //             return;
+    //         }
+    //         if (element.length >=4 && element.substring(0,4) == '<img') {
+    //             formatted += ' '.repeat(indent * tabSize) + element + '\n';
+    //             return;
+    //         }
+    //
+    //         if (indent < 0) indent = 0;
+    //
+    //         formatted += ' '.repeat(indent * tabSize) + element + '\n';
+    //
+    //
+    //         if (!isEndingElement) {
+    //             indent++;
+    //         }
+    //     })
+    //     return formatted;
+    // }
+
     function formatHTML2(html) {
         const tabSize = 4;
-        let formatted = '', indent = -1;
-        console.log('beginning formatting')
-        html.match(/<([^>]+)>/g).forEach(element => {
-            let isEndingElement = element.charAt(1) === '/';
-            if (isEndingElement) {
-                indent--;
+        let formatted = '';
+        let indent = 0;
+
+        // Split the HTML into tokens (tags and text content)
+        const tokens = html.split(/(<[^>]+>)/g).filter(token => token.trim().length > 0);
+
+        tokens.forEach(token => {
+            // Check if the token is an HTML tag
+            if (token.startsWith('<') && token.endsWith('>')) {
+                let isEndingElement = token.startsWith('</');
+                // Detect self-closing tags (or void elements like <br> or <img>)
+                let isSelfClosing = token.match(/\/>$/) || token.match(/^<br/i) || token.match(/^<img/i);
+
+                if (isEndingElement) {
+                    indent--;
+                }
+
+                formatted += ' '.repeat(indent * tabSize) + token.trim() + '\n';
+
+                if (!isEndingElement && !isSelfClosing) {
+                    indent++;
+                }
+            } else {
+                // The token is text content; trim and output it if not empty
+                let text = token.trim();
+                if (text) {
+                    formatted += ' '.repeat(indent * tabSize) + text + '\n';
+                }
             }
+        });
 
-            console.log(element)
-            if (element.length >=3 && element.substring(0,3) == '<br') {
-                formatted += ' '.repeat(indent * tabSize) + element + '\n';
-                return;
-            }
-            if (element.length >=4 && element.substring(0,4) == '<img') {
-                formatted += ' '.repeat(indent * tabSize) + element + '\n';
-                return;
-            }
-
-            if (indent < 0) indent = 0;
-
-            formatted += ' '.repeat(indent * tabSize) + element + '\n';
-
-
-            if (!isEndingElement) {
-                indent++;
-            }
-        })
         return formatted;
     }
 
