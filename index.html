@@ -1,103 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Formatter</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            /* display: table-column; */
-            height: 100vh;
-        }
-
-        .container {
-            display: flex;
-            flex: 1;
-        }
-
-        .input-section, .output-section {
-            flex: 1;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .input-section {
-            border-right: 2px solid #ddd;
-        }
-
-        .output-section {
-            background-color: #f9f9f9;
-        }
-
-        #inputText {
-            width: 100%;
-            height: 90%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 16px;
-            resize: none;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .editor {
-            width: 100%;
-            height: 90%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 16px;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-        }
-        
-        .output {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        
-        <div class="input-section">
-            <h2>Rich Text Editor</h2>
-            <div id="inputText" class="editor" contenteditable="true" placeholder="Type something..."></div>
-        </div>
-        <!-- <div class="input-section">
-            <h2>Input</h2>
-            <textarea id="inputText" placeholder="Type something..."></textarea>
-        </div> -->
-        
-        <div class="output-section">
-            <h2>Formatted Output</h2>
-            <div id="output" class="output">Your formatted output will appear here.</div>
+<div class="c-message_kit__blocks c-message_kit__blocks--rich_text">
+    <div class="c-message__message_blocks c-message__message_blocks--rich_text">
+        <div class="p-block_kit_renderer">
+            <div class="p-block_kit_renderer__block_wrapper p-block_kit_renderer__block_wrapper--first">
+                <div class="p-rich_text_block">
+                    <div class="p-rich_text_section">
+                        hmmm it looks like the ones in the non-stripe users list do not see the Finance L1? They can see SQSPP in payment settings, but the finance L1 doesn’t show for them
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <script>
-        const inputText = document.getElementById('inputText');
-        const output = document.getElementById('output');
-
-        inputText.addEventListener('input', () => {
-            // console.log(inputText)
-            // const text = inputText.value;
-            // // Format the text as desired; here, an example of wrapping with <strong>
-            // let formattedText = text
-            //     .split('\n')
-            //     .map(line => `<strong>${line}</strong>`)
-            //     .join('<br>');
-            // formattedText = text;
-
-            // output.innerHTML = formattedText;
-        });
-    </script>
-</body>
-</html>
-
+</div>
+<div class="c-files_container">
+    <div class="c-message_kit__file__meta">
+        <span class="c-message_kit__file__meta__text">
+            <span class="c-file_name">
+                image.png
+            </span>
+        </span>
+        &nbsp;
+        <button class="c-button-unstyled c-icon_button c-icon_button--size_medium c-message_kit__file__meta__collapse c-icon_button--default">
+            <svg class="">
+                <path>
+                </path>
+            </svg>
+        </button>
+    </div>
+    <div>
+        <div class="c-file_gallery c-file_gallery__single_image c-file_gallery--mouse_mode">
+            <div class="c-aspect_box__outer p-message_gallery_image_file c-file_gallery_image_file">
+                <div class="c-aspect_box__inner">
+                    <div class="c-aspect_box__content">
+                        <a class="c-link p-file_image_thumbnail__wrapper" href="https://files.slack.com/files-pri/T01Q44F43U7-F08ANE2159Q/image.png">
+                            <div class="p-file_image_thumbnail__tiny_thumb_wrapper">
+                                <img src="https://files.slack.com/files-tmb/T01Q44F43U7-F08ANE2159Q-5cc669243d/image_720.png" class="p-file_image_thumbnail__image">
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
