@@ -63,11 +63,9 @@ function setDisplay(formattedContent) {
 }
 
 function copyToClipboard() {
-        const div = document.getElementById('output');
-    
         // Create a range and select the div contents
         const range = document.createRange();
-        range.selectNodeContents(div);
+        range.selectNodeContents(OUTPUT);
     
         // Clear current selection and add the new range
         const selection = window.getSelection();
@@ -77,10 +75,24 @@ function copyToClipboard() {
             // Execute the copy command
             const successful = document.execCommand('copy');
             if (successful) {
-                showCopiedMessage();
+                // showCopiedMessage();
+                displayOutputOverlay();
             } else {
                 alert('Copy command was unsuccessful');
             }
+}
+
+function displayOutputOverlay() {
+    const overlay = Object.assign(document.createElement('div'), {
+        id: 'output-overlay',
+        innerText: 'copied!'
+    });
+    OUTPUT.appendChild(overlay);
+    
+    overlay.style.opacity = '1';
+    setTimeout(() => {
+        overlay.style.opacity = '0';
+    }, 600); // 1 second
 }
 
 function showCopiedMessage() {
@@ -133,10 +145,10 @@ function processElement(element) {
         // We don't want to process anything in the left gutter 
         return [];
     }
-    // if (element.className == "p-rich_text_section") {
-    //     // Rich text sections are differently 
-    //     return processMessageContentElement(element);
-    // }
+    if (element.className == "p-rich_text_block") {
+        // Rich text sections are differently 
+        return processMessageContentElement(element);
+    }
     transformedNode = convertElementToHTML(element);
     
     // PROCESS ELEMENT CHILDREN 
@@ -169,9 +181,9 @@ function convertElementToHTML(element) {
     if (element.className == "c-timestamp__label") {
         return processTimestamp(element);
     }
-    if (element.className == "p-rich_text_section") {
-        return processRichTextSection(element);
-    }
+    // if (element.className == "p-rich_text_section") {
+    //     return processRichTextSection(element);
+    // }
 
     if (USER_FORMAT_SELECTIONS.showReactionEmojis) {
         if (element.className == "c-button-unstyled c-reaction c-reaction--light") {
@@ -234,7 +246,7 @@ function recurseRichTextSection(element) {
             transformedNode = processElementNode(element);
             break;
         case NodeType.TEXT_NODE:
-            transformedNode = document.createTextNode(element.textContent);
+            transformedNode = document.createTextNode(element.textContent.replace(/&nbsp;/g, ' '));
             break;
     }
 
@@ -252,31 +264,73 @@ function recurseRichTextSection(element) {
 
 
 function processElementNode(element) {
-    if (element.classList.contains("p-rich_text_block")) {
-        transformedNode = document.createElement("span")
-    }
-    if (element.classList.contains("p-rich_text_list__ordered")) {
-        transformedNode = document.createElement('ol');
-    }
-    if (element.classList.contains("p-rich_text_list__bullet")) {
-        transformedNode = document.createElement('ul');
-    }
-    if (element.tagName == "LI") {
-        transformedNode = document.createElement('li');
-    }
-    if (element.classList.contains("p-rich_text_section")) {
+    let transformedNode = null;
+    if (element.className == "p-rich_text_section") {
         transformedNode = document.createElement('p');
     }
+    // if (element.className == "p-rich_text_section") {
+    //     transformedNode = document.createElement('p');
+    // }
+    // if (element.classList.contains("p-rich_text_block")) {
+    //     transformedNode = document.createElement("span")
+    // }
+    // if (element.classList.contains("p-rich_text_list__ordered")) {
+    //     transformedNode = document.createElement('ol');
+    // }
+    // if (element.classList.contains("p-rich_text_list__bullet")) {
+    //     transformedNode = document.createElement('ul');
+    // }
+    // if (element.tagName == "LI") {
+    //     transformedNode = document.createElement('li');
+    // }
+    if (element.className == "c-mrkdwn__pre") {
+        transformedNode = document.createElement('p');
+        transformedNode.classList.add('code-block');
+    }
+    if (element.classList.contains("p-rich_text_block--no-overflow")) {
+        transformedNode = document.createElement('span');
+        transformedNode.classList.add('code-block-code');
+    }
+    if (element.className == "c-mrkdwn__highlight") {
+        return null;
+    }
     // text sections
+
     switch (element.tagName) {
-        case "B":
+        // this is inline code 
+        case "CODE":
+            transformedNode = document.createElement('code');
+            break;
+        // this is code block
+        // case "PRE":
+            // transformedNode = document.createElement('p');
+                        // transformedNode.classList.add('code-block');
+            // break;
+            // transformedNode = document.createElement('div');
+            // transformedNode.classList.add('code-block');
+            break;
+        case "BLOCKQUOTE":
+            transformedNode = document.createElement('blockquote');
+            break;
+        case "OL":
+            transformedNode = document.createElement('ol');
+            break;
+        case "UL":
+            transformedNode = document.createElement('ul');
+            break;
+        case "LI":
+            return document.createElement('li');    
+        // case "B":
+        case "SPAN":
             return document.createElement('b');
         case "I":
             return document.createElement('i');
         case "S":
             return document.createElement('s');
         case "A":
-            return document.createElement('a');
+            transformedNode = document.createElement('a');
+            transformedNode.href = element.href;
+            break;
         case "BR":
             return document.createElement('br');
         default:
@@ -284,7 +338,32 @@ function processElementNode(element) {
             //     innerHTML: element.innerHTML
             // });
     }
-    return null;
+    return transformedNode;
+}
+
+function processMessageContentElement(element) {
+    let transformedNode = null;
+    switch (element.nodeType) {
+        case NodeType.ELEMENT_NODE:
+            transformedNode = processElementNode(element);
+            break;
+        case NodeType.TEXT_NODE:
+            return [ document.createTextNode(element.textContent.replace(/\u00A0/g, ' ')) ];
+    }
+
+    // recursion
+
+    const processedChildren = Array.from(element.childNodes)
+        .map(child => processMessageContentElement(child))
+        .flat();
+
+    if (transformedNode == null) {
+        return processedChildren;
+    } else {
+        transformedNode.append(...processedChildren);
+        return [transformedNode];
+    }
+
 }
 
 function processReactionEmojiImg(element) {

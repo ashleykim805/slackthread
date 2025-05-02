@@ -515,7 +515,6 @@
         ELEMENT_NODE: 1,
         TEXT_NODE: 3
     }
-    var eek = null;
     function processMessageContentElement(element) {
         let transformedNode = null;
         if (element.nodeType === NodeType.ELEMENT_NODE) {
@@ -531,7 +530,6 @@
             }
             if (element.tagName == "LI") {
                 transformedNode = document.createElement('li');
-                eek = element;
             }
             if (element.classList.contains("p-rich_text_section")) {
                 transformedNode = document.createElement('div');
