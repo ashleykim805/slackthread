@@ -1,89 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Formatter</title>
-  <style>
-    body {
-      display: flex;
-      height: 100vh;
-      padding: 10px;
-      background-color: #f3f3f3;
-    }
-    .container {
-      width: 50%;
-      padding: 10px;
-    }
-    .bordered {
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: white;
-      padding: 10px;
-      height: 100%;
-      overflow-y: auto;
-    }
-    .button {
-      margin-top: 10px;
-      padding: 8px 12px;
-      background-color: blue;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    td {
-      border: 1px solid #ccc;
-      padding: 8px;
-    }
-  </style>
-</head>
-<body>
-<div class="container" style="border-right: 1px solid #ccc;">
-  <h2>Paste your content</h2>
-  <div id="input" contenteditable="true" class="bordered"></div>
-</div>
-
-<div class="container">
-  <h2>Formatted Output</h2>
-  <div>
-    <label><input type="radio" name="format" value="bullets" checked> Bullet View</label>
-    <label><input type="radio" name="format" value="table"> Table View</label>
-    <label><input type="checkbox" id="showReactions"> Show Reactions</label>
+<div class="c-virtual_list__item">
+  <div class="c-message_kit__background p-message_pane_message__message c-message_kit__message">
+      <div class="c-message_kit__hover">
+          <div class="c-message_kit__actions c-message_kit__actions--default">
+              <div class="c-message_kit__gutter">
+                  <div class="c-message_kit__gutter__left">
+                      <span class="p-member_profile_hover_card">
+                          <button class="c-button-unstyled c-message_kit__avatar c-avatar c-avatar--interactive">
+                              <span class="c-base_icon__width_only_container">
+                                  <img src="https://ca.slack-edge.com/E01Q44F43U7-UKB1DLGBY-e53c18ba0452-48" class="c-base_icon c-base_icon--image">
+                              </span>
+                          </button>
+                      </span>
+                  </div>
+                  <div class="c-message_kit__gutter__right">
+                      <span class="c-message__sender c-message_kit__sender">
+                          <span class="p-member_profile_hover_card">
+                              <button class="c-link--button c-message__sender_button">
+                                  Ashley Kim
+                              </button>
+                          </span>
+                          <span class="offscreen">
+                              Ashley Kim
+                          </span>
+                          <span class="c-custom_status">
+                              <span class="c-emoji c-emoji__small c-emoji--inline">
+                                  <img src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-large/1f5d3-fe0f.png">
+                              </span>
+                          </span>
+                      </span>
+                      &nbsp;&nbsp;
+                      <a class="c-link c-timestamp" href="https://squarespace.slack.com/archives/DJXCZNUMR/p1746130010191569">
+                          <span class="c-timestamp__label">
+                              4:06 PM
+                          </span>
+                      </a>
+                      <br>
+                      <div class="c-message_kit__blocks c-message_kit__blocks--rich_text">
+                          <div class="c-message__message_blocks c-message__message_blocks--rich_text">
+                              <div class="p-block_kit_renderer">
+                                  <div class="p-block_kit_renderer__block_wrapper p-block_kit_renderer__block_wrapper--first">
+                                      <div class="p-rich_text_block">
+                                          <div class="p-rich_text_section">
+                                              this is one message
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
   </div>
-  <button onclick="formatText()" class="button">Format</button>
-  <div id="output" class="bordered" style="margin-top: 10px;"></div>
 </div>
-
-<script>
-  function formatText() {
-    const inputText = document.getElementById("input").innerText;
-    const outputDiv = document.getElementById("output");
-    const formatType = document.querySelector('input[name="format"]:checked').value;
-    const showReactions = document.getElementById("showReactions").checked;
-
-    let formattedText = "";
-
-    if (formatType === "bullets") {
-      formattedText = inputText.split('\n').map(line => `• ${line}`).join('<br>');
-    } else if (formatType === "table") {
-      formattedText = "<table><tbody>";
-      inputText.split('\n').forEach(line => {
-        formattedText += `<tr><td>${line}</td></tr>`;
-      });
-      formattedText += "</tbody></table>";
-    }
-
-    if (showReactions) {
-      formattedText += "<br>😊 👍 ❤️";
-    }
-
-    outputDiv.innerHTML = formattedText;
-  }
-</script>
-</body>
-</html>
+<div class="c-virtual_list__item">
+  <div class="c-message_kit__background c-message_kit__background--hovered p-message_pane_message__message c-message_kit__message">
+      <div class="c-message_kit__hover c-message_kit__hover--hovered">
+          <div class="c-message_kit__actions c-message_kit__actions--above">
+              <div class="c-message_kit__gutter">
+                  <div class="c-message_kit__gutter__left">
+                      <div class="p-message_pane_message__compact_timestamp p-message_pane_message__compact_timestamp--light p-message_pane_message__compact_timestamp--adjacent">
+                          <a class="c-link c-timestamp" href="https://squarespace.slack.com/archives/DJXCZNUMR/p1746130015688239">
+                              <span class="c-timestamp__label">
+                                  4:06
+                              </span>
+                          </a>
+                      </div>
+                  </div>
+                  <div class="c-message_kit__gutter__right">
+                      <span class="offscreen">
+                          Ashley Kim
+                      </span>
+                      <div class="c-message_kit__blocks c-message_kit__blocks--rich_text">
+                          <div class="c-message__message_blocks c-message__message_blocks--rich_text">
+                              <div class="p-block_kit_renderer">
+                                  <div class="p-block_kit_renderer__block_wrapper p-block_kit_renderer__block_wrapper--first">
+                                      <div class="p-rich_text_block">
+                                          <div class="p-rich_text_section">
+                                              this is a separate message
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

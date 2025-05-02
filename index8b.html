@@ -30,17 +30,14 @@
             border-right: 2px solid #ddd;
         }
 
-        .output-section {
-            /*background-color: #f9f9f9;*/
-        }
 
         /*.message-list-item:has(> .sender-name-label) {*/
         /*    list-style-type: disc;*/
         /*}*/
 
-        .message-container:not(:has(> .sender-name-label)) {
-            list-style-type: none;
-        }
+        /*.message-container:not(:has(> .sender-name-label)) {*/
+        /*    list-style-type: none;*/
+        /*}*/
 
         .editor {
             width: 100%;
@@ -79,7 +76,7 @@
 
         .output {
             padding: 10px;
-            font-size: 12px;
+            /*font-size: 12px;*/
             border-radius: 5px;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
         }
@@ -284,15 +281,31 @@
     <input type="checkbox" id="include-emoji" name="vehicle1" title="title" value="value"><label>include reaction emojis</label>
 <!--    </fieldset>-->
     <button onclick="copyToClipboard()">copy</button>
-    <button id="clickMe" onclick="copyWithStyle('output')">copy2</button>
+    <button id="clickMe" onclick="copyWithStyle('output')">copy output html</button>
     <div class="output" id="output">
+        <ul>
+            <li><b>name:</b>
+            <div>
+                message content here
+                <ul>
+                    <li>maybe a list in here</li>
+                </ul>
+            </div>
+            </li>
+            <li><b>name2:</b></li>
+                <div>
+                    message content here
+                    <ul>
+                        <li>maybe a list in here</li>
+                    </ul>
+                </div>
+        </ul>
     </div>
 </div>
 </div>
 <script>
     function copyToClipboard() {
         const output = document.getElementById("output");
-        // const text = output.innerText; // Use `.innerHTML` if you want HTML
         const text = output.innerText; // Use `.innerHTML` if you want HTML
 
         navigator.clipboard.writeText(text).then(() => {
@@ -303,34 +316,14 @@
     }
 
     const copyWithStyle = (element) => {
+        const output = document.getElementById("output");
+        const text = output.innerHTML; // Use `.innerHTML` if you want HTML
 
-        const doc = document;
-        const text = doc.getElementById(element);
-        let range;
-        let selection;
-
-        if (doc.body.createTextRange) {
-
-            range = doc.body.createTextRange();
-            range.moveToElement(text);
-            range.select();
-
-        } else if (window.getSelection) {
-
-            selection = window.getSelection();
-
-            range = doc.createRange();
-            range.selectNodeContents(text);
-
-            selection.removeAllRanges();
-            selection.addRange(range);
-
-        }
-
-        document.execCommand('copy');
-        window.getSelection().removeAllRanges();
-        document.getElementById('clickMe').value = 'Copied to clipboard!';
-
+        navigator.clipboard.writeText(text).then(() => {
+            // alert("Copied to clipboard!");
+        }).catch(err => {
+            console.error("Failed to copy:", err);
+        });
     }
 </script>
 <script>
@@ -353,8 +346,13 @@
         }
     });
 
+    editor.addEventListener('input', () => {
+        formatSlackInput();
+    });
+
     emojibox.addEventListener('click', () => {
         try {
+            // emojibox.checked = true;
             formatSlackInput();
         } catch (err) {
             console.log(err);
@@ -362,11 +360,7 @@
         }
     })
 
-    editor.addEventListener('input', () => {
-        formatSlackInput();
-    });
-
-    function cutDownTheElements() {
+    function cutDownTheSlackHTML() {
         // Create a temporary div to format the editor HTML
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = editor.innerHTML;
@@ -376,9 +370,9 @@
         editor.innerHTML = tempDiv.innerHTML;
     }
 
-    const ATTRIBUTES_TO_KEEP = ["class", "src", "href"];
-
     function keepSpecificAttributes(element) {
+        const ATTRIBUTES_TO_KEEP = ["class", "src", "href"];
+
         // Loop through all attributes of the element
         for (let i = element.attributes.length - 1; i >= 0; i--) {
             const attr = element.attributes[i];
@@ -396,57 +390,53 @@
         );
     }
 
+    var messages = {
+        LIST : "ul",
+        TEXT : "div"
+    }
+    var messageStyle = messages.LIST;
+
     function formatSlackInput() {
-        cutDownTheElements();
+        output.innerHTML = null;
+        cutDownTheSlackHTML();
         removeQuickReactButtons();
-        // 1. Create a temporary div that copies editor html
+        // 1. Create a temporary div to hold the output
         const tempDiv = document.createElement('div');
         // 2. We want to display the messages as ul
         const messagesContainer = document.createElement('ul');
-        messagesContainer.className = "messages"
+        messagesContainer.className = "messages-container"
         // 3. Process what's inside the editor, add it the temp div
         tempDiv.append(messagesContainer)
         messagesContainer.append(...processElement(editor));
 
-        output.innerHTML = tempDiv.innerHTML;
+        // output.innerHTML = tempDiv.innerHTML;
+        output.append(tempDiv)
     }
 
     /**
-     * Returns a list of elements which should be appended to a parent
+     * Should be called for each child of an element
+     * Returns a list of elements which should be appended to the element
      * @param element to process, convert & parse
      */
     function processElement(element) {
         let transformedNode = null;
         if (element.className == "c-virtual_list__item") {
+            // this is what constitutes an entire message (one thing that a single user sent in one go)
             transformedNode = document.createElement('li');
             transformedNode.className = "message-container"
         }
-        if (element.classList.contains("c-message_kit__reaction_bar")) {
-            transformedNode = document.createElement('div');
-            transformedNode.className = "emoji-reactions-container"
-        }
-        if (element.classList.contains("c-reaction_add")) {
-            // Cut out element for adding reaction
-            return [];
-        }
-        if (element.classList.contains("c-reaction")) {
-            if (!shouldIncludeEmoji()) {
-                return [];
-            }
-            transformedNode = document.createElement('span');
-            transformedNode.className = "emoji-reaction-container"
-        }
-        if (element.className == "c-emoji c-emoji__small") {
-            transformedNode = document.createElement('img');
-            transformedNode.className = "reaction-emoji-img"
-            transformedNode.src = element.src;
-        }
-        if (element.className == "c-reaction__count") {
-            transformedNode = document.createElement('span');
-            transformedNode.className = "emoji-reaction-count"
-            transformedNode.innerText = element.innerText;
-        }
-        if (element.className == "c-message_actions__group") {
+        // if (element.classList.contains("c-message_kit__message")) {
+        //     // this is what constitutes an entire message (one thing that a single user sent in one go)
+        //     transformedNode = document.createElement('li');
+        //     transformedNode.className = "message-container"
+        // }
+        // if (element.classList.contains("c-message_kit__gutter__right")) {
+        //     transformedNode = document.createElement('li');
+        //     transformedNode.className = "message-container"
+        // }
+        if (element.classList.contains("c-message_kit__gutter__left")) {
+            // Don't process the left gutter bc this contains the consecutive message timestamp,
+            // which we don't want to display
             return [];
         }
         if (element.className == "c-link--button c-message__sender_button") {
@@ -455,60 +445,56 @@
         if (element.className == "c-timestamp__label") {
             transformedNode = processTimestamp(element)
         }
-        // if (element.className == "p-rich_text_list p-rich_text_list__ordered p-rich_text_list--nested") {
-        //     transformedNode = document.createElement('ol');
-        // }
-        // if (element.className == "p-rich_text_list p-rich_text_list__bullet p-rich_text_list--nested") {
-        //     transformedNode = document.createElement('ul');
-        // }
-        // if (element.tagName == "LI") {
-        //     console.log('got in here')
-        //     console.dir(element)
-        //     transformedNode = document.createElement('li');
-        //     transformedNode.innerHTML = element.innerHTML;
-        // }
-        // if (element.tagName == "OL") {
-        //     console.log('isOL')
-        //     console.dir(element)
-        //     transformedNode = document.createElement('ol');
-        // }
-        // if (element.tagName == "UL") {
-        //     transformedNode = document.createElement('ul');
-        // }
-        // if (element.classList.contains("p-rich_text_list__ordered")) {
-        //     transformedNode = document.createElement('ol');
-        // }
-        // if (element.classList.contains("p-rich_text_list__ordered")) {
-        //     transformedNode = document.createElement('ol');
-        // }
         if (element.classList.contains("p-rich_text_block")) {
             return processMessageContentElement(element);
         }
-        // if (element.className == "p-rich_text_section") {
-        //     transformedNode = document.createElement('div');
-        //     // const br = document.createElement("br"); // Create the <br> element
-        //     const t = document.createElement("t"); // Create the <t> element (though <t> is not a standard HTML tag)
-        //     const message = document.createElement('span');
-        //     message.innerHTML = element.innerHTML;
-        //     // transformedNode.appendChild(br)
-        //     // transformedNode.appendChild(t)
-        //     transformedNode.appendChild(message)
-        //     return [ transformedNode ];
-        //     // return [document.createElement('t'), transformedNode];
-        // }
 
+        /**
+         * EMOJI REACTIONS
+         */
+        if (element.classList.contains("c-message_kit__reaction_bar")) {
+            if (!shouldIncludeEmoji()) {
+                return [];
+            }
+            transformedNode = document.createElement('div');
+            transformedNode.className = "emoji-reactions-container"
+        }
+        if (element.classList.contains("c-reaction")) {
+            transformedNode = document.createElement('span');
+            transformedNode.style.width = "30px";
+            transformedNode.style.height = "16px";
+            transformedNode.className = "emoji-reaction-container"
+        }
+        if (element.className == "c-emoji c-emoji__small") {
+            transformedNode = document.createElement('img');
+            transformedNode.className = "reaction-emoji-img"
+            transformedNode.style.width = "16px";
+            transformedNode.style.height = "16px";
+            transformedNode.src = element.src;
+        }
+        if (element.className == "c-reaction__count") {
+            transformedNode = document.createElement('span');
+            transformedNode.className = "emoji-reaction-count"
+            transformedNode.innerHTML = element.innerText + "&nbsp;";
+        }
+
+        // RECURSION
+
+        // Recursively process each child of the element
+        // Each child could result in a list of children, so this 2d array gets flattened in the end
         const processedChildren = Array.from(element.children)
             .map(child => processElement(child))
             .flat();
 
         if (transformedNode == null) {
-            // if this element was not meant to be transformed into an actual element to add,
+            // If this element was not meant to be transformed into an actual element to add,
             // it's still possible its children should be appended to the parent
             return processedChildren;
         }
-
+        // If this element was transformed into something useful, append the processed children to the transformed node
+        // return the transformed node as the only output of the processing
         transformedNode.append(...processedChildren);
-        return [transformedNode];
+        return [ transformedNode ];
     }
 
     function processNameLabel(element) {
@@ -525,40 +511,62 @@
         return timestamp;
     }
 
+    const NodeType = {
+        ELEMENT_NODE: 1,
+        TEXT_NODE: 3
+    }
+    var eek = null;
     function processMessageContentElement(element) {
         let transformedNode = null;
-        if (element.nodeType == Node.TEXT_NODE) {
-            return [document.createTextNode(element.textContent)]
+        if (element.nodeType === NodeType.ELEMENT_NODE) {
+            if (element.classList.contains("p-rich_text_block")) {
+                transformedNode = document.createElement("div")
+                transformedNode.className = "message-content"
+            }
+            if (element.classList.contains("p-rich_text_list__ordered")) {
+                transformedNode = document.createElement('ol');
+            }
+            if (element.classList.contains("p-rich_text_list__bullet")) {
+                transformedNode = document.createElement('ul');
+            }
+            if (element.tagName == "LI") {
+                transformedNode = document.createElement('li');
+                eek = element;
+            }
+            if (element.classList.contains("p-rich_text_section")) {
+                transformedNode = document.createElement('div');
+                transformedNode.className = "message-content-text"
+            }
+
+            // text sections
+            switch (element.tagName) {
+                case "B":
+                    transformedNode = document.createElement('b');
+                    break;
+                case "I":
+                    transformedNode = document.createElement('i');
+                    break;
+                case "S":
+                    transformedNode = document.createElement('s');
+                    break;
+                case "A":
+                    transformedNode = document.createElement('a');
+                    transformedNode.href = element.href;
+                    break;
+                case "BR":
+                    transformedNode = document.createElement('br');
+                    break;
+                default:
+                    console.log(element.tagName)
+                    console.log(element)
+            }
         }
-        if (element.classList.contains("p-rich_text_block")) {
-            transformedNode = document.createElement("div")
-            transformedNode.className = "message-text-content"
+
+        if (element.nodeType === NodeType.TEXT_NODE) {
+            return [ document.createTextNode(element.textContent) ]
         }
-        if (element.classList.contains("p-rich_text_list__ordered")) {
-            transformedNode = document.createElement('ol');
-        }
-        if (element.classList.contains("p-rich_text_list__bullet")) {
-            transformedNode = document.createElement('ul');
-        }
-        if (element.tagName == "LI") {
-            transformedNode = document.createElement('li');
-            transformedNode.innerHTML = element.innerHTML;
-        }
-        if (element.classList.contains("p-rich_text_section")) {
-            // transformedNode = document.createElement('div');
-            // const br = document.createElement("br"); // Create the <br> element
-            // const t = document.createElement("t"); // Create the <t> element (though <t> is not a standard HTML tag)
-            const message = document.createElement('span');
-            message.innerHTML = element.innerHTML;
-            message.className = "p-rich_text_section"
-            // transformedNode.appendChild(br)
-            // transformedNode.appendChild(t)
-            // transformedNode.appendChild(message)
-            transformedNode = message;
-            return [transformedNode];
-            // return [ message ];
-            // return [document.createElement('t'), transformedNode];
-        }
+
+        // recursion
 
         const processedChildren = Array.from(element.childNodes)
             .map(child => processMessageContentElement(child))

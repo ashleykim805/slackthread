@@ -1,44 +1,233 @@
-<div class="c-message_kit__blocks c-message_kit__blocks--rich_text">
-    <div class="c-message__message_blocks c-message__message_blocks--rich_text">
-        <div class="p-block_kit_renderer">
-            <div class="p-block_kit_renderer__block_wrapper p-block_kit_renderer__block_wrapper--first">
-                <div class="p-rich_text_block">
-                    <div class="p-rich_text_section">
-                        hmmm it looks like the ones in the non-stripe users list do not see the Finance L1? They can see SQSPP in payment settings, but the finance L1 doesn’t show for them
-                    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Layout Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f0f2f5;
+        }
+
+        .header-banner {
+            background: linear-gradient(135deg, #4a90e2, #7c4dff);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header-banner h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            padding: 32px;
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .left-panel, .right-panel {
+            flex: 1;
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease;
+        }
+
+        .left-panel:hover, .right-panel:hover {
+            transform: translateY(-2px);
+        }
+
+        .center-options {
+            width: 220px;
+            padding: 24px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        h2, h3 {
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            background: #f8f9fa;
+        }
+
+        .form-group input:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+        }
+
+        .display-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            padding: 12px 16px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 14px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover {
+            background: #357abd;
+            transform: translateY(-1px);
+        }
+
+        .option-btn:active {
+            transform: translateY(0);
+        }
+
+        .display-area {
+            min-height: 300px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 2px solid #e1e1e1;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        .display-area:hover {
+            border-color: #4a90e2;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .center-options {
+                width: 100%;
+                margin: 20px 0;
+            }
+
+            .display-options {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .option-btn {
+                flex: 1;
+                min-width: 150px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-banner">
+        <h1>Interactive Split Layout</h1>
+    </header>
+
+    <div class="main-content">
+        <div class="left-panel">
+            <h2>Input Form</h2>
+            <form id="inputForm">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter title">
                 </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Enter description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" id="category" name="category" placeholder="Enter category">
+                </div>
+                <button type="submit" class="option-btn">Submit</button>
+            </form>
+        </div>
+
+        <div class="center-options">
+            <h3>Display Options</h3>
+            <div class="display-options">
+                <button class="option-btn">Option 1</button>
+                <button class="option-btn">Option 2</button>
+                <button class="option-btn">Option 3</button>
+                <button class="option-btn">Option 4</button>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <h2>Display Area</h2>
+            <div class="display-area" id="displayArea">
+                Content will appear here...
             </div>
         </div>
     </div>
-</div>
-<div class="c-files_container">
-    <div class="c-message_kit__file__meta">
-        <span class="c-message_kit__file__meta__text">
-            <span class="c-file_name">
-                image.png
-            </span>
-        </span>
-        &nbsp;
-        <button class="c-button-unstyled c-icon_button c-icon_button--size_medium c-message_kit__file__meta__collapse c-icon_button--default">
-            <svg class="">
-                <path>
-                </path>
-            </svg>
-        </button>
-    </div>
-    <div>
-        <div class="c-file_gallery c-file_gallery__single_image c-file_gallery--mouse_mode">
-            <div class="c-aspect_box__outer p-message_gallery_image_file c-file_gallery_image_file">
-                <div class="c-aspect_box__inner">
-                    <div class="c-aspect_box__content">
-                        <a class="c-link p-file_image_thumbnail__wrapper" href="https://files.slack.com/files-pri/T01Q44F43U7-F08ANE2159Q/image.png">
-                            <div class="p-file_image_thumbnail__tiny_thumb_wrapper">
-                                <img src="https://files.slack.com/files-tmb/T01Q44F43U7-F08ANE2159Q-5cc669243d/image_720.png" class="p-file_image_thumbnail__image">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</body>
+</html>
