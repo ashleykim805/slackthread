@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Slack Message Formatter</title>
+    <style>
+        :root {
+            --primary-color: #4A154B;
+            --secondary-color: #36C5F0;
+            --border-color: #E0E0E0;
+            --background-color: #F8F9FA;
+            --text-color: #1D1C1D;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 30px;
+        }
+
+        .input-section,
+        .output-section {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        h2 {
+            margin: 0 0 20px 0;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .editor {
+            width: 100%;
+            height: calc(100% - 60px);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            background: white;
+            box-shadow: inset 0 2px 4px var(--shadow-color);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .output {
+            padding: 16px;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid var(--border-color);
+            min-height: calc(100% - 120px);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .controls {
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-color);
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #611f69;
+        }
+
+        /* Message styling improvements */
+        .message-container {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sender-name-label {
+            color: var(--primary-color);
+            margin-right: 8px;
+        }
+
+        .message-sent-timestamp-label {
+            color: #616061;
+            font-size: 12px;
+        }
+
+        .message-content {
+            margin-top: 4px;
+        }
+
+        .emoji-reactions-container {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Remove the CSS styles since we're moving them to JS */
+        /*.emoji-reaction-container {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 6px;
+            background: #F8F8F8;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .emoji-reaction-container img {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin: 0 2px;
+        }*/
+
+        /* List styling */
+        ul, ol {
+            padding-left: 24px;
+            margin: 8px 0;
+        }
+
+        li {
+            margin: 4px 0;
+        }
+
+        /* Link styling */
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding: 12px;
+            }
+
+            .input-section,
+            .output-section {
+                padding: 16px;
+            }
+
+            .editor,
+            .output {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="input-section">
+        <h2>Rich Text Editor</h2>
+        <div class="editor" contenteditable="true" id="editor" placeholder="Paste your Slack message here...">
+            <div class="c-virtual_list__item">
+                <div class="c-message_kit__background p-message_pane_message__message c-message_kit__message">
+                    <div class="c-message_kit__hover">
+                        <div class="c-message_kit__actions c-message_kit__actions--default">
+                            <div class="c-message_kit__gutter">
+                                <div class="c-message_kit__gutter__left"><span class="p-member_profile_hover_card"><button
+                                        class="c-button-unstyled c-message_kit__avatar c-avatar c-avatar--interactive"><span
+                                        class="c-base_icon__width_only_container"><br class="Apple-interchange-newline"><img
+                                        class="c-base_icon c-base_icon--image"
+                                        src="https://ca.slack-edge.com/E01Q44F43U7-UKB1DLGBY-e53c18ba0452-48"></span></button></span>
+                                </div>
+                                <div class="c-message_kit__gutter__right"><span
+                                        class="c-message__sender c-message_kit__sender"><span
+                                        class="p-member_profile_hover_card"><button
+                                        class="c-link--button c-message__sender_button">Ashley Kim</button></span><span
+                                        class="offscreen">Ashley Kim</span></span>&nbsp;&nbsp;<a
+                                        class="c-link c-timestamp"
+                                        href="https://squarespace.slack.com/archives/DJXCZNUMR/p1738351464874559"><span
+                                        class="c-timestamp__label">2:24 PM</span></a><br>
+                                    <div class="c-message_kit__blocks c-message_kit__blocks--rich_text">
+                                        <div class="c-message__message_blocks c-message__message_blocks--rich_text">
+                                            <div class="p-block_kit_renderer">
+                                                <div class="p-block_kit_renderer__block_wrapper p-block_kit_renderer__block_wrapper--first">
+                                                    <div class="p-rich_text_block">
+                                                        <div class="p-rich_text_section">regular text
+                                                            here<br><b>bold</b>&nbsp;<i>italic</i>&nbsp;<s>strikethrough</s>&nbsp;<a
+                                                                    class="c-link c-link--underline"
+                                                                    href="http://facebook.com/">link</a>&nbsp;anddd
+                                                            regular text again<br></div>
+                                                        <ol class="p-rich_text_list p-rich_text_list__ordered p-rich_text_list--nested">
+                                                            <li>ordered list</li>
+                                                            <li>number two</li>
+                                                        </ol>
+                                                        <div class="p-rich_text_section">cholera<br></div>
+                                                        <ul class="p-rich_text_list p-rich_text_list__bullet p-rich_text_list--nested">
+                                                            <li>unorderlist</li>
+                                                            <li>number 2</li>
+                                                        </ul>
+                                                        <div class="p-rich_text_section">petriochor<br></div>
+                                                        <blockquote class="c-mrkdwn__quote">block quote</blockquote>
+                                                        <div class="p-rich_text_section"><code class="c-mrkdwn__code">code</code><br>
+                                                        </div>
+                                                        <pre class="c-mrkdwn__pre"><div
+                                                                class="p-rich_text_block--no-overflow">code block. </div></pre>
+                                                        <div class="p-rich_text_section"><span
+                                                                class="c-emoji c-emoji__medium c-emoji--inline"><img
+                                                                src="https://emoji.slack-edge.com/T01Q44F43U7/np-4583/b2afb033ddbecddc.png"></span><span
+                                                                class="p-member_profile_hover_card"><a
+                                                                class="c-link c-member_slug c-member_slug--light c-member_slug--link"
+                                                                href="https://squarespace.slack.com/team/U019C91MZ0Q">@clee</a></span><br>fancy!<span
+                                                                class="c-message__edited_label">&nbsp;(edited)&nbsp;</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="c-message_kit__attachments">
+                                        <div class="c-message_attachment">
+                                            <div class="c-message_attachment__delete_container">
+                                                <button class="c-button-unstyled c-message_attachment__delete"><i
+                                                        class="c-deprecated-icon c-icon--times-small undefined"></i>
+                                                </button>
+                                            </div>
+                                            <div class="c-message_attachment__border"></div>
+                                            <div class="c-message_attachment__body">
+                                                <div class="c-message_attachment__row"><span
+                                                        class="c-message_attachment__author"><span
+                                                        class="c-message_attachment__part"><img
+                                                        class="c-message_attachment__author_icon"
+                                                        src="https://slack-imgs.com/?c=1&amp;o1=wi32.he32.si&amp;url=https%3A%2F%2Fstatic.xx.fbcdn.net%2Frsrc.php%2FyB%2Fr%2F2sFJRNmJ5OP.ico"><span
+                                                        class="c-message_attachment__author_name">Facebook</span></span></span>
+                                                </div>
+                                                <div class="c-message_attachment__row"><span
+                                                        class="c-message_attachment__title"><a
+                                                        class="c-link c-link--underline c-message_attachment__title_link"
+                                                        href="http://facebook.com/"><span>Log into Facebook</span><span></span></a></span>
+                                                </div>
+                                                <div class="c-message_attachment__row"><span
+                                                        class="c-message_attachment__text"><span>Log into Facebook to start sharing and connecting with your friends, family, and people you know.</span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="c-virtual_list__item">
+                <div class="c-message_kit__background p-message_pane_message__message c-message_kit__message">
+                    <div class="c-message_kit__hover">
+                        <div class="c-message_kit__actions c-message_kit__actions--default">
+                            <div class="c-message_kit__gutter">
+                                <div class="c-message_kit__gutter__left"><span class="p-member_profile_hover_card"><button
+                                        class="c-button-unstyled c-message_kit__avatar c-avatar c-avatar--interactive"><span
+                                        class="c-base_icon__width_only_container"><img
+                                        class="c-base_icon c-base_icon--image"
+                                        src="https://ca.slack-edge.com/E01Q44F43U7-UKB1DLGBY-e53c18ba0452-48"></span></button></span>
+                                </div>
+                                <div class="c-message_kit__gutter__right"><span
+                                        class="c-message__sender c-message_kit__sender"><span
+                                        class="p-member_profile_hover_card"><button
+                                        class="c-link--button c-message__sender_button">Ashley Kim</button></span><span
+                                        class="offscreen">Ashley Kim</span></span>&nbsp;&nbsp;<a
+                                        class="c-link c-timestamp"
+                                        href="https://squarespace.slack.com/archives/DJXCZNUMR/p1738353323751589"><span
+                                        class="c-timestamp__label">2:55 PM</span></a><br>
+                                    <div class="c-message_kit__blocks c-message_kit__blocks--rich_text">
+                                        <div class="c-message__message_blocks c-message__message_blocks--rich_text">
+                                            <div class="p-block_kit_renderer">
+                                                <div class="p-block_kit_renderer__block_wrapper p-block_kit_renderer__block_wrapper--first">
+                                                    <div class="p-rich_text_block">
+                                                        <div class="p-rich_text_section">ATTEMPPT 23</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="c-message_kit__reaction_bar c-reaction_bar c-reaction_bar--collapsed">
+                                        <span><button
+                                                class="c-button-unstyled c-reaction c-reaction--light c-reaction--reacted"><img
+                                                class="c-emoji c-emoji__small"
+                                                src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-small/1f970@2x.png"><span
+                                                class="c-reaction__count">1</span></button><button
+                                                class="c-button-unstyled c-reaction c-reaction--light c-reaction--reacted"><img
+                                                class="c-emoji c-emoji__small"
+                                                src="https://a.slack-edge.com/production-standard-emoji-assets/14.0/apple-small/1f60d@2x.png"><span
+                                                class="c-reaction__count">1</span></button><button
+                                                class="c-button-unstyled c-reaction c-reaction--light c-reaction--reacted"><img
+                                                class="c-emoji c-emoji__small"
+                                                src="https://emoji.slack-edge.com/T01Q44F43U7/aaaaaa/99689f7cf57cd5eb.gif"><span
+                                                class="c-reaction__count">1</span></button><button
+                                                class="c-button-unstyled c-reaction_add"><svg><path
+                                                class="c-reaction_add__bg"></path><path
+                                                class="c-reaction_add__fg"></path></svg></button></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="c-virtual_list__item">
+                <div class="c-message_kit__background c-message_kit__background--hovered p-message_pane_message__message c-message_kit__message p-message_pane_message__message--last">
+                    <div class="c-message_kit__hover c-message_kit__hover--hovered">
+                        <div class="c-message_kit__actions c-message_kit__actions--above">
+                            <div class="c-message_kit__gutter">
+                                <div class="c-message_kit__gutter__left">
+                                    <div class="p-message_pane_message__compact_timestamp p-message_pane_message__compact_timestamp--light p-message_pane_message__compact_timestamp--adjacent">
+                                        <a class="c-link c-timestamp"
+                                           href="https://squarespace.slack.com/archives/DJXCZNUMR/p1738353328910099"><span
+                                                class="c-timestamp__label">2:55</span></a></div>
+                                </div>
+                                <div class="c-message_kit__gutter__right"><span class="offscreen">Ashley Kim</span>
+                                    <div class="c-message_kit__blocks c-message_kit__blocks--rich_text">
+                                        <div class="c-message__message_blocks c-message__message_blocks--rich_text">
+                                            <div class="p-block_kit_renderer">
+                                                <div class="p-block_kit_renderer__block_wrapper p-block_kit_renderer__block_wrapper--first">
+                                                    <div class="p-rich_text_block">
+                                                        <div class="p-rich_text_section">WHY NOT A LIST ELEMENT</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="output-section">
+    <h2>Formatted Output</h2>
+    <div class="controls">
+        <div class="checkbox-wrapper">
+            <input type="checkbox" id="include-emoji" name="include-emoji">
+            <label for="include-emoji">Include reactions</label>
+        </div>
+        <button onclick="copyToClipboard()">Copy Text</button>
+        <button onclick="copyWithStyle('output')">Copy HTML</button>
+    </div>
+    <div class="output" id="output">
+        <ul>
+            <li><b>name:</b>
+            <div>
+                message content here
+                <ul>
+                    <li>maybe a list in here</li>
+                </ul>
+            </div>
+            </li>
+            <li><b>name2:</b></li>
+                <div>
+                    message content here
+                    <ul>
+                        <li>maybe a list in here</li>
+                    </ul>
+                </div>
+        </ul>
+    </div>
+</div>
+</div>
+<script>
+    function copyToClipboard() {
+        const output = document.getElementById("output");
+        const text = output.innerText; // Use `.innerHTML` if you want HTML
+
+        navigator.clipboard.writeText(text).then(() => {
+            // alert("Copied to clipboard!");
+        }).catch(err => {
+            console.error("Failed to copy:", err);
+        });
+    }
+
+    const copyWithStyle = (element) => {
+        const output = document.getElementById("output");
+        const text = output.innerHTML; // Use `.innerHTML` if you want HTML
+
+        navigator.clipboard.writeText(text).then(() => {
+            // alert("Copied to clipboard!");
+        }).catch(err => {
+            console.error("Failed to copy:", err);
+        });
+    }
+</script>
+<script>
+    function shouldIncludeEmoji() {
+        return emojibox.checked;
+    }
+
+    const editor = document.getElementById('editor');
+    const output = document.getElementById('output');
+    const emojibox = document.getElementById("include-emoji");
+
+    // Clear the editor when it's clicked again
+    editor.addEventListener('click', () => {
+        // editor.innerHTML = null;
+        try {
+            formatSlackInput();
+        } catch (err) {
+            console.log(err);
+            output.innerText = err;
+        }
+    });
+
+    editor.addEventListener('input', () => {
+        formatSlackInput();
+    });
+
+    emojibox.addEventListener('click', () => {
+        try {
+            // emojibox.checked = true;
+            formatSlackInput();
+        } catch (err) {
+            console.log(err);
+            output.innerText = err;
+        }
+    })
+
+    function cutDownTheSlackHTML() {
+        // Create a temporary div to format the editor HTML
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = editor.innerHTML;
+        // Loop through each element of the temporary div to remove specific attributes
+        tempDiv.querySelectorAll('*').forEach(element => keepSpecificAttributes(element));
+
+        editor.innerHTML = tempDiv.innerHTML;
+    }
+
+    function keepSpecificAttributes(element) {
+        const ATTRIBUTES_TO_KEEP = ["class", "src", "href"];
+
+        // Loop through all attributes of the element
+        for (let i = element.attributes.length - 1; i >= 0; i--) {
+            const attr = element.attributes[i];
+
+            // If the attribute name is not in the allowed list, remove it
+            if (!ATTRIBUTES_TO_KEEP.includes(attr.name)) {
+                element.removeAttribute(attr.name);
+            }
+        }
+    }
+
+    function removeQuickReactButtons() {
+        document.querySelectorAll('c-message_actions__container c-message__actions').forEach(element =>
+            element.remove()
+        );
+    }
+
+    var messages = {
+        LIST : "ul",
+        TEXT : "div"
+    }
+    var messageStyle = messages.LIST;
+
+    function formatSlackInput() {
+        output.innerHTML = null;
+        cutDownTheSlackHTML();
+        removeQuickReactButtons();
+        // 1. Create a temporary div to hold the output
+        const tempDiv = document.createElement('div');
+        // 2. We want to display the messages as ul
+        const messagesContainer = document.createElement('ul');
+        messagesContainer.className = "messages-container"
+        // 3. Process what's inside the editor, add it the temp div
+        tempDiv.append(messagesContainer)
+        messagesContainer.append(...processElement(editor));
+
+        // output.innerHTML = tempDiv.innerHTML;
+        output.append(tempDiv)
+    }
+
+    /**
+     * Should be called for each child of an element
+     * Returns a list of elements which should be appended to the element
+     * @param element to process, convert & parse
+     */
+    function processElement(element) {
+        let transformedNode = null;
+        if (element.className == "c-virtual_list__item") {
+            // this is what constitutes an entire message (one thing that a single user sent in one go)
+            transformedNode = document.createElement('li');
+            transformedNode.className = "message-container"
+        }
+        // if (element.classList.contains("c-message_kit__message")) {
+        //     // this is what constitutes an entire message (one thing that a single user sent in one go)
+        //     transformedNode = document.createElement('li');
+        //     transformedNode.className = "message-container"
+        // }
+        // if (element.classList.contains("c-message_kit__gutter__right")) {
+        //     transformedNode = document.createElement('li');
+        //     transformedNode.className = "message-container"
+        // }
+        if (element.classList.contains("c-message_kit__gutter__left")) {
+            // Don't process the left gutter bc this contains the consecutive message timestamp,
+            // which we don't want to display
+            return [];
+        }
+        if (element.className == "c-link--button c-message__sender_button") {
+            transformedNode = processNameLabel(element)
+        }
+        if (element.className == "c-timestamp__label") {
+            transformedNode = processTimestamp(element)
+        }
+        if (element.classList.contains("p-rich_text_block")) {
+            return processMessageContentElement(element);
+        }
+
+        /**
+         * EMOJI REACTIONS
+         */
+        if (element.classList.contains("c-message_kit__reaction_bar")) {
+            if (!shouldIncludeEmoji()) {
+                return [];
+            }
+            transformedNode = document.createElement('div');
+            transformedNode.className = "emoji-reactions-container"
+        }
+        if (element.classList.contains("c-reaction")) {
+            transformedNode = document.createElement('span');
+            transformedNode.className = "emoji-reaction-container";
+            // Apply styles directly to the element
+            Object.assign(transformedNode.style, {
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '2px 6px',
+                background: '#F8F8F8',
+                border: '1px solid var(--border-color)',
+                borderRadius: '12px',
+                fontSize: '12px'
+            });
+        }
+        if (element.className == "c-emoji c-emoji__small") {
+            transformedNode = document.createElement('img');
+            transformedNode.className = "reaction-emoji-img";
+            transformedNode.src = element.src;
+            // Apply styles directly to the image
+            Object.assign(transformedNode.style, {
+                width: '16px',
+                height: '16px',
+                verticalAlign: 'middle',
+                margin: '0 2px'
+            });
+        }
+        if (element.className == "c-reaction__count") {
+            transformedNode = document.createElement('span');
+            transformedNode.className = "emoji-reaction-count"
+            transformedNode.innerHTML = element.innerText + "&nbsp;";
+        }
+
+        // RECURSION
+
+        // Recursively process each child of the element
+        // Each child could result in a list of children, so this 2d array gets flattened in the end
+        const processedChildren = Array.from(element.children)
+            .map(child => processElement(child))
+            .flat();
+
+        if (transformedNode == null) {
+            // If this element was not meant to be transformed into an actual element to add,
+            // it's still possible its children should be appended to the parent
+            return processedChildren;
+        }
+        // If this element was transformed into something useful, append the processed children to the transformed node
+        // return the transformed node as the only output of the processing
+        transformedNode.append(...processedChildren);
+        return [ transformedNode ];
+    }
+
+    function processNameLabel(element) {
+        const name = document.createElement("b");
+        name.innerText = element.innerText;
+        name.className = "sender-name-label"
+        return name;
+    }
+
+    function processTimestamp(element) {
+        const timestamp = document.createElement("span");
+        timestamp.innerText = " [" + element.innerText + "]: ";
+        timestamp.className = "message-sent-timestamp-label"
+        return timestamp;
+    }
+
+    const NodeType = {
+        ELEMENT_NODE: 1,
+        TEXT_NODE: 3
+    }
+    var eek = null;
+    function processMessageContentElement(element) {
+        let transformedNode = null;
+        if (element.nodeType === NodeType.ELEMENT_NODE) {
+            if (element.classList.contains("p-rich_text_block")) {
+                transformedNode = document.createElement("div")
+                transformedNode.className = "message-content"
+            }
+            if (element.classList.contains("p-rich_text_list__ordered")) {
+                transformedNode = document.createElement('ol');
+            }
+            if (element.classList.contains("p-rich_text_list__bullet")) {
+                transformedNode = document.createElement('ul');
+            }
+            if (element.tagName == "LI") {
+                transformedNode = document.createElement('li');
+                eek = element;
+            }
+            if (element.classList.contains("p-rich_text_section")) {
+                transformedNode = document.createElement('div');
+                transformedNode.className = "message-content-text"
+            }
+
+            // text sections
+            switch (element.tagName) {
+                case "B":
+                    transformedNode = document.createElement('b');
+                    break;
+                case "I":
+                    transformedNode = document.createElement('i');
+                    break;
+                case "S":
+                    transformedNode = document.createElement('s');
+                    break;
+                case "A":
+                    transformedNode = document.createElement('a');
+                    transformedNode.href = element.href;
+                    break;
+                case "BR":
+                    transformedNode = document.createElement('br');
+                    break;
+                default:
+                    console.log(element.tagName)
+                    console.log(element)
+            }
+        }
+
+        if (element.nodeType === NodeType.TEXT_NODE) {
+            return [ document.createTextNode(element.textContent) ]
+        }
+
+        // recursion
+
+        const processedChildren = Array.from(element.childNodes)
+            .map(child => processMessageContentElement(child))
+            .flat();
+
+        if (transformedNode == null) {
+            // if this element was not meant to be transformed into an actual element to add,
+            // it's still possible its children should be appended to the parent
+            return processedChildren;
+        }
+
+        transformedNode.append(...processedChildren);
+        return [transformedNode];
+    }
+
+</script>
+</body>
+
+</html>
